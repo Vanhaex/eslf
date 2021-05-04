@@ -1,0 +1,25 @@
+{
+    "name": "eslf/vanhaex",
+    "version": "1.0.0",
+    "description": "Easy, Simple and Lightweight web Framework for creating web applications",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vanhaex",
+            "email": "monlouis59@hotmail.fr"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+      "php": "^7.1",
+      "phpmailer/phpmailer": "^6.4",
+      "ext-mysqli":"*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Framework\\": "framework/",
+            "App\\": "app/"
+        }
+    }
+}
