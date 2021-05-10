@@ -9,9 +9,6 @@ require('../config/database.config.php');
 class Database
 {
 
-  private const NO_ERROR = 0;
-  private const DATABASE_CONNECT_EMPTY_USER = -1;
-
   /**
   * @var \mysqli
   */
@@ -31,7 +28,7 @@ class Database
   private $result_object;
   private $row_count; // Number of rows
   private $affected_rows;
-  private $last_id
+  private $last_id;
 
   private $err_code;
   private $err_string;
@@ -55,7 +52,7 @@ class Database
 
   public function connect()
   {
-    if (empty($this->host) || empty($this->user)) {
+    if (empty($this->host) || empty($this->port) || empty($this->user) || empty($this->password) || empty($this->database)) {
       printf("Database connection error : Missing informations");
       exit();
     }
@@ -250,18 +247,12 @@ class Database
     if ($this->transaction == true) {
       return $this->mysqli->commit();
     }
-    else {
-      printf("Impossible to commit : Transaction mode set to false");
-    }
   }
 
   public function rollback()
   {
     if ($this->transaction == true) {
       return $this->mysqli->rollback();
-    }
-    else {
-      printf("Impossible to rollback : Transaction mode set to false");
     }
   }
 
