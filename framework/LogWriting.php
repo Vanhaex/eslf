@@ -2,56 +2,34 @@
 
 namespace Framework;
 
-private $file;
-private $level;
-private $message;
+require_once('../config/app.config.php');
 
-// Levels
-private const CRITICAL = "CRITICAL";
-private const ERROR = "ERROR";
-private const WARNING = "WARNING";
-private const INFO = "INFO";
-private const DEBUG = "DEBUG";
-
-/**
-* Class for writing logs
-*/
 class LogWriting
 {
-  public function __construct(){}
+  private $filename;
+  private $message;
+  private $level;
 
-  /**
-  * Open File to write
-  */
-  public function getFile()
+  // Tableau contenant les différents niveaux de log
+  private $loglevel = array(
+    'ALERT',
+    'ERROR',
+    'WARNING',
+    'DEBUG',
+    'INFO'
+  );
+
+  public function __construct($filename, $level, $message)
   {
-    if (is_null($this->file)) {
-      $this->file = dirname(__FILE__) . "/log/app.log";
-      fopen($this->file, 'w');
-    }
-  }
-
-  /**
-  * Write in the opened file
-  * @param string $level The level of the message created
-  */
-  public function writeLog($level, $message)
-  {
-    $this->getFile();
-    $this->level = $level;
-    $this->message = $message;
-
-    if (isset($this->file)) {
-      $info = "[" . date("d-m-Y H:i:s") . "][" . $level . "]" . $message
-      fwrite($this->file, $info);
-    }
-    else {
+    // assurons nous que le niveau de log ainsi que le message existent
+    if(!in_array($level, $this->loglevel) || is_null($message)) {
       return false;
     }
-
-    return true;
+    else {
+      $message = $message . " \n";
+      error_log("[ESLF][". date("Y-m-d H:i:s") ."][". $level ."] ".$message, 3, LOG_FILE_PATH . $filename);
+    }
   }
 }
 
-
- ?>
+?>
