@@ -18,8 +18,7 @@ class InputUtility
             "open", "parameter", ";",
             "update", "close", "connect",
             "<script>", "database", "delete",
-            "substring"
-          ];
+            "substring" ];
 
   /**
   * Prévient des injections SQL et noSQL
@@ -31,7 +30,7 @@ class InputUtility
   {
     if (isset($value)) {
       $value = str_replace(InputUtility::INJECTION_PROTECTION_KEY, '', $value);
-      return htmlspecialchars($value);
+      return htmlspecialchars($value, ENT_QUOTES);
     }
     else {
       return $defaultValue;
@@ -68,7 +67,7 @@ class InputUtility
   * @param string $type      Le type de donnée associé au fichier (nom, taille, etc...)
   * @param string $default   La valeur par défaut
   **/
-  public static function files($key = null, $type = null, $default = null)
+  public static function file($key = null, $type = null, $default = null)
   {
     return static::preventInjection($_FILES[$key][$type], $default);
   }
@@ -122,7 +121,7 @@ class InputUtility
   **/
   public static function serverProtocol()
   {
-    if (isset(static::server('SERVER_PROTOCOL'))) {
+    if (static::server('SERVER_PROTOCOL') !== null) {
       $server = return static::server('SERVER_PROTOCOL');
       return $server;
     }
@@ -148,7 +147,7 @@ class InputUtility
   **/
   public static function ip()
   {
-    if (isset(static::server('HTTP_CLIENT_IP'))) {
+    if (static::server('HTTP_CLIENT_IP') !== null) {
       $ips[] = static::server('HTTP_CLIENT_IP');
       // on va filter l'IP de la machine client afin de vérifier si c'est bien une adresse IP
       foreach ($ips as $ip) {
@@ -168,7 +167,7 @@ class InputUtility
   **/
   public static function port()
   {
-    if (isset(static::server('SERVER_PORT'))) {
+    if (static::server('SERVER_PORT') !== null) {
       return static::server('SERVER_PORT');
     }
     else {
