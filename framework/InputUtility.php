@@ -122,7 +122,7 @@ class InputUtility
   public static function serverProtocol()
   {
     if (static::server('SERVER_PROTOCOL') !== null) {
-      $server = return static::server('SERVER_PROTOCOL');
+      $server = static::server('SERVER_PROTOCOL');
       return $server;
     }
     else {

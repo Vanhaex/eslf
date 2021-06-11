@@ -2,101 +2,48 @@
 
 namespace Framework;
 
+use Framework\InputUtility;
+use Framework\RouteException;
+
 /**
 * Classe pour gérer le routage
 **/
 class Router
 {
   /**
-  * Tableau avec les données de chaque route
+  * L'URL sur laquelle on aimerait se rendre
   **/
-  private $routes = array();
+  private $url;
 
   /**
-  * Tableau avec le nom de la route
+  * La liste des routes
   **/
-  private $routes_name = array();
+  private $routes = [];
 
-  /**
-  * Tableau avec l'URL de la route
-  **/
-  private $routes_path = array();
-
-  /**
-  * Tableau avec le controller de la route
-  **/
-  private $routes_controller = array();
-
-  /**
-  * Tableau avec le ID de la route
-  **/
-  private $routes_method = array();
-
-  /**
-  * Compteur de routes qui est incrémenté à chaque nouvelle route. Commence à 0 par défaut
-  **/
-  private $id_routes = 0;
-
-  /**
-  * Valeur booléene qui permet de rediriger vers une page spécifique en cas d'erreur 404
-  **/
-  private $error_404 = false;
-
-  /**
-  * Initialiser une route
-  **/
-  public function initRoute($routeName, $url_path, $controller, $method)
+  public function __construct($url)
   {
-    // On remplit les attributs de la classe par des tableaux associatifs qui correspondent à l'id d'une route
-    $this->routes_name[$routeName] = $this->id_routes;
-    $this->routes_path[$url_path] = $this->id_routes;
-    $this->routes_controller[$controller] = $this->id_routes;
-    $this->$routes_method[$method] = $this->id_routes;
-
-    // On remplit le tableau avec comme clef l'id de la route et comme valeurs l'URL, le controller, l'action etc...
-    $this->routes[$this->id_routes] = array("name" => $routeName, "path" => $url_path, "controller" => $controller, "method" => $method);
-
-    // On incremente donc à chaque nouvelle route
-    $this->id_routes++;
+    $this->url = $url;
   }
 
-  /**
-  * Retourne l'URL si elle existe
-  **/
-  public function getURL($routeName)
+  public function get($path, $callable)
   {
-    if (array_key_exists($routeName, $this->routes_name)) {
-      return "/" . $this->routes[$this->routes_name[$routeName]]["path"];
-    }
-    // ...Sinon, on redirige vers l'accueil ! (ou autre page par défaut)
-    else {
-      return "";
-    }
+    $route = new Route($path, $callable);
+    $this->routes["GET"][] = $route;
+    return $route; // On retourne la route
   }
 
-  /**
-  * Retourne le controller et la méthode correspondantes si elles existent
-  **/
-  public function getController($url_path)
+  public function run()
   {
-    if (array_key_exists($url_path, $this->routes_path)) {
-      return array($this->routes[$this->routes_path[$url_path]]["controller"], $this->routes[$this->routes_path[$url_path]]["method"]);
+    if (InputUtility::server('REQUEST_METHOD')) {
+      throw new RouteException('La méthode REQUEST_METHOD est inexistante.');
     }
-    // Si l'URL n'existe pas, donc erreur 404 et on redirige vers le template prévu pour
-    else {
-      return $this->error_404 = true;
+    foreach ($this->routes[InputUtility::server('REQUEST_METHOD')] as $route) {
+      if ($route->match($this->url)) {
+        return $route->call();
+      }
     }
-  }
 
-  /**
-  * Redirige vers un template en cas d'erreur 404
-  **/
-  public function error404()
-  {
-    if ($this->error_404 == true) {
-      return true
-    }
-    return false;
+    throw new RouteException('Aucune route existante.');
   }
 }
 
