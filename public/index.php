@@ -21,13 +21,13 @@ ini_set("session.use_only_cookies", 1);
 require_once("../vendor/autoload.php");
 
 use Framework\Router;
+use Framework\Controller;
 
-$router = new Router($_GET['url']);
-$router->get('/');
-$router->run();
+$router = new Router();
 
-
-
+$router->get('/', 'homeController', 'index');
+$render = $router->run();
+echo $render;
 
 
 

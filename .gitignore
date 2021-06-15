@@ -2,5 +2,7 @@ config
 vendor
 stats
 log/*
+views_c
+cache
 
 composer.lock
