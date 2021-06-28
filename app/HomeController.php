@@ -9,12 +9,17 @@ class HomeController extends Controller
 {
   public function index()
   {
-    echo $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'views' .  DIRECTORY_SEPARATOR;
+    $this->view('home.tpl');
   }
 
-  public function bzibzi()
+  public function bzipbzip()
   {
-    echo "bzibzibizizizizizizizi";
+    $this->view('home.tpl');
+  }
+
+  public function test($id)
+  {
+    echo "Le ID est égal à : " . $id;
   }
 }
 

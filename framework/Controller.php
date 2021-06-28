@@ -3,6 +3,7 @@
 namespace Framework;
 
 require_once('libs/Smarty.class.php');
+require_once('../config/app.config.php');
 
 use Smarty;
 
@@ -11,7 +12,7 @@ abstract class Controller
 
   protected $smarty;
 
-  public function getSmarty()
+  public function __construct()
   {
     if (is_null($this->smarty)) {
         $this->smarty = new Smarty();
@@ -19,10 +20,7 @@ abstract class Controller
         $this->smarty->setTemplateDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'views' .  DIRECTORY_SEPARATOR);
         $this->smarty->setCompileDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'views_c' . DIRECTORY_SEPARATOR);
         $this->smarty->setCacheDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'cache' . DIRECTORY_SEPARATOR);
-        $this->smarty->debugging = true;
-    }
-    else {
-      var_dump("HELLO VIEW");
+        $this->smarty->debugging = false;
     }
 
     return $this->smarty;
