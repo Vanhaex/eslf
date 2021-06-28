@@ -23,11 +23,25 @@ require_once("../vendor/autoload.php");
 use Framework\Router;
 use Framework\Controller;
 
-$router = new Router();
+try
+{
+  $router = new Router();
 
-$router->get('/', 'homeController', 'index');
-$render = $router->run();
-echo $render;
+  include("../config/routes.config.php");
+
+  $render = $router->run();
+  echo $render;
+}
+catch(\Framework\RouteException $e)
+{
+  header("HTTP/1.1 404 Not Found");
+  echo "ERREUR 404"; // Temporaire, on va trouver des alternatives pour afficher une page prévue à cet effet
+}
+catch(\Exception $e)
+{
+  header("HTTP/1.1 505 Internal Server Error");
+  echo "ERREUR 505"; // Temporaire, on va trouver des alternatives pour afficher une page prévue à cet effet
+}
 
 
 
