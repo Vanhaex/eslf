@@ -10,8 +10,6 @@ class Route {
     private $controller;
     private $method;
 
-    private $matches = [];
-
     public function __construct($path, $controller, $method)
     {
         $this->path = trim($path, '/');  // On retire les / inutils
@@ -26,17 +24,17 @@ class Route {
     public function match($url)
     {
         $url = trim($url, '/');
-        $path = preg_replace('#:([\w]+)#', '([^/]+)', $this->path);
-        $regex = "#^$path$#i";
-        if(!preg_match($regex, $url, $matches)){
-            return false;
+        $regexp_path = preg_replace('#:[a-z-_]+#', '([a-zA-Z0-9\-\_\/]+)', $this->path);
+        $result = preg_match('#^' . $regexp_path . '$#', $url, $matches);
+        array_splice($matches, 0, 1);
+        if($result == 1){
+          return $matches;
         }
-        array_shift($matches);
-        $this->matches = $matches;  // On sauvegarde les paramètre dans l'instance pour plus tard
-        return true;
+
+        return false;
     }
 
-    public function call()
+    public function call($param)
     {
       ob_start();
 
@@ -50,11 +48,14 @@ class Route {
         $controller = new $controller();
 
         if (method_exists($controller, $method)) {
-          call_user_func_array(array($controller, $method), $this->matches);
+          call_user_func_array(array($controller, $method), $param);
         }
         else {
-          return RouteException;
+          throw new RouteException;
         }
+      }
+      else {
+        throw new RouteException;
       }
 
       $rendered_page = ob_get_contents();
