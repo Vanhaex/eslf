@@ -7,6 +7,14 @@ namespace Framework;
 **/
 class InputUtility
 {
+
+  /**
+  * Indique si les méthodes PUT et DELETE doivent être réécrites en POST
+  * Peut être nécessaire pour les API REST qui ne supportent pas ces methodes
+  *
+  **/
+  const OVERRIDE = 'HTTP_X_HTTP_METHOD_OVERRIDE';
+
   /**
   * Un array content les termes qui doivent être exclus pour éviter l'injection SQL
   *
@@ -117,6 +125,18 @@ class InputUtility
   }
 
   /**
+  * Indique la méthode utilisée dans al requête (GET, POST, PUT, etc...)
+  * On vérifie si les requêtes PUT et DELETE son réécrites en POST
+  *
+  **/
+  public static function request_method()
+  {
+    $req_method = $_SERVER['REQUEST_METHOD'];
+
+    return strtoupper($req_method);
+  }
+
+  /**
   * Retourne le protocole HTTP de la requête
   **/
   public static function serverProtocol()
@@ -175,7 +195,27 @@ class InputUtility
       return $default;
     }
   }
+
+  /**
+  * Méthode qui vérifie si l'URI est propre
+  *
+  **/
+  public static function clean_uri(){
+    $path = trim(static::server('REQUEST_URI'));
+
+    if(substr($path, -1) == '/' && strlen($path) > 1) {
+        $path = substr($path, 0, -1);
+    }
+
+    if(strncmp($path, '/index.php', 10) == 0){
+        $path = '/';
+    }
+
+    return $path;
+  }
+
 }
 
 
 ?>
+
