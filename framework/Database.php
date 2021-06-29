@@ -23,7 +23,7 @@ class Database
   private $password;
   private $database;
 
-  private $exceptions;
+  private $db_exceptions;
   private $transaction;
   private $result_object;
   private $row_count; // Number of rows
@@ -45,7 +45,7 @@ class Database
     $this->user = CONFIG_DATABASE_USER;
     $this->password = CONFIG_DATABASE_PASSWORD;
     $this->database = CONFIG_DATABASE_DATABASE;
-    $this->exceptions = CONFIG_DATABASE_EXCEPTIONS;
+    $this->db_exceptions = CONFIG_DATABASE_EXCEPTIONS;
     $this->transaction = CONFIG_DATABASE_TRANSACTION;
     $this->result_object = CONFIG_DATABASE_FETCH_OBJECT;
   }
@@ -122,9 +122,9 @@ class Database
           }
         }
 
-        $this->row_count = $this->mysqli->num_rows; // Getting the number of rows
+        $this->row_count = $result->num_rows; // Getting the number of rows
 
-        $this->result->free(); // Free memory
+        $result->free(); // Free memory
       }
       else{
         $this->affected_rows = $this->mysqli->affected_rows;
@@ -141,7 +141,7 @@ class Database
 
   public function preparedQuery(string $prepared_query, string $bind_param, ...$bind_data)
   {
-    this->reset_mysqli(); // Empty the variables
+    $this->reset_mysqli(); // Empty the variables
 
     trim($prepared_query); // Remove spaces
 
@@ -201,17 +201,18 @@ class Database
   public function getNextResult()
   {
     $next_result = current($this->result);
-    next($next_result);
+    next($this->result);
 
-    if ((!is_array($next_result)) || (!is_object($next_result))) {
-      printf("Error : the result is not an array or an object");
-      exit();
+    if (!is_array($next_result) && !is_object($next_result)) {
+      return null;
     }
+
+    return $next_result;
   }
 
   public function getNumberResults()
   {
-    return $this->num_of_rows;
+    return $this->row_count;
   }
 
   public function getLastID()
@@ -237,7 +238,7 @@ class Database
       $this->result_store = 0;
       $this->insert_id = 0;
       $this->affected_rows = 0;
-      $this->num_of_rows = 0;
+      $this->row_count = 0;
   }
 
   /**** Transaction options ****/
