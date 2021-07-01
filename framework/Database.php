@@ -3,6 +3,7 @@
 namespace Framework;
 
 use mysqli;
+use ReflectionClass;
 
 require('../config/database.config.php');
 
@@ -23,9 +24,9 @@ class Database
   private $password;
   private $database;
 
-  private $db_exceptions;
-  private $transaction;
-  private $result_object;
+  private $db_exceptions = true;
+  private $transaction = true;
+  private $result_object = true;
   private $row_count; // Number of rows
   private $affected_rows;
   private $last_id;
@@ -36,6 +37,11 @@ class Database
   public function __construct()
   {
     $this->init();
+    $this->connect();
+
+    if ($this->transaction == true) {
+      $this->autocommit();
+    }
   }
 
   public function init()
@@ -45,9 +51,6 @@ class Database
     $this->user = CONFIG_DATABASE_USER;
     $this->password = CONFIG_DATABASE_PASSWORD;
     $this->database = CONFIG_DATABASE_DATABASE;
-    $this->db_exceptions = CONFIG_DATABASE_EXCEPTIONS;
-    $this->transaction = CONFIG_DATABASE_TRANSACTION;
-    $this->result_object = CONFIG_DATABASE_FETCH_OBJECT;
   }
 
   public function connect()
@@ -107,11 +110,12 @@ class Database
 
     $exec_query = $this->mysqli->real_query($query);
 
-    if ($exec_query == true) {
+    if ($exec_query = true) {
       if ($this->mysqli->field_count) {
+
         $result = $this->mysqli->store_result();
 
-        if ($this->result_object == true) {
+        if ($this->result_object = true) {
           while ($data = $result->fetch_object()) {
             array_push($this->result, $data);
           }
@@ -128,7 +132,7 @@ class Database
       }
       else{
         $this->affected_rows = $this->mysqli->affected_rows;
-        $this->last_id = $this->mysqli->last_id;
+        $this->last_id = $this->mysqli->insert_id;
       }
     }
     else {
@@ -143,50 +147,56 @@ class Database
   {
     $this->reset_mysqli(); // Empty the variables
 
-    trim($prepared_query); // Remove spaces
+    $prepared_query = trim($prepared_query); // Remove spaces
 
     $stmt = $this->mysqli->prepare($prepared_query);
 
-    if ($stmt == true) {
-      $stmt->bind_param($bind_param, $bind_data);
+    if (is_array($bind_data[0])) {
+      $bind_data = $bind_data[0];
+    }
 
-      $exec_preapred_query = $stmt->execute();
+    foreach (array_keys($bind_data) as $i) {
+      $refs_bind_data[] = &$bind_data[$i];
+    }
 
-      if ($exec_preapred_query == true) {
-        if ($this->mysqli->field_count) {
-          $result = $this->mysqli->result_metadata();
+    $bind_params = array_merge(array($bind_param), $refs_bind_data);
 
-          if ($this->result_object == true) {
-            while ($data = $result->fetch_object()) {
-              array_push($this->result, $data);
-            }
+    $ref = new ReflectionClass('mysqli_stmt');
+    $ref->getMethod("bind_param")->invokeArgs($stmt, $bind_params);
+
+    $result_execute = $stmt->execute();
+
+    if ($result_execute) {
+
+      $meta = $stmt->result_metadata();
+
+      if ($meta != false) {
+
+        $result = $stmt->get_result();
+
+        if ($this->result_object = true) {
+          while ($data = $result->fetch_object()) {
+            array_push($this->result, $data);
           }
-          else {
-            while ($data = $result->fetch_assoc()) {
-              array_push($this->result, $data);
-            }
+        }
+        else {
+          while ($data = $result->fetch_assoc()) {
+            array_push($this->result, $data);
           }
-
-          $this->row_count = $this->mysqli->num_rows; // Getting the number of rows
-
-          $this->result->free(); // Free memory
         }
-        else{
-          $this->affected_rows = $this->mysqli->affected_rows;
-          $this->last_id = $this->mysqli->last_id;
-        }
+
+        $this->row_count = $result->num_rows;
+        $meta->free();
       }
-      else {
-        $this->err_code = $this->mysqli->errno;
-        $this->err_string = $this->mysqli->error;
-        printf("An error occured during the execution of prepared query");
-        exit();
+      else{
+        $this->affected_rows = $this->mysqli->affected_rows;
+        $this->last_id = $stmt->insert_id;
       }
     }
     else {
-      $this->err_code = $this->mysqli->errno;
-      $this->err_string = $this->mysqli->error;
-      printf("The prepared query is incorrect");
+      $this->err_code = $stmt->errno;
+      $this->err_string = $stmt->error;
+      printf("An error occured during the execution of prepared query");
       exit();
     }
 
@@ -239,6 +249,7 @@ class Database
       $this->insert_id = 0;
       $this->affected_rows = 0;
       $this->row_count = 0;
+      $this->result = [];
   }
 
   /**** Transaction options ****/
