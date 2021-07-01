@@ -2,15 +2,13 @@
 
 namespace Framework;
 
-require_once('libs/Smarty.class.php');
-require_once('../config/app.config.php');
-
 use Smarty;
 
 abstract class Controller
 {
 
   protected $smarty;
+  protected $database;
 
   public function __construct()
   {
@@ -28,7 +26,6 @@ abstract class Controller
 
   protected function view($template, $assign_value = null)
   {
-
     if (!is_null($assign_value)) {
       foreach ($assign_value as $key => $value) {
         $this->smarty->assign($key, $value);
