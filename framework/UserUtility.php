@@ -61,6 +61,31 @@ class UserUtility
     if ($isCell == 1) {
       $regex = "/^(06|07)(?!0+$)[0-9]{8}$/g";
     }
+    elseif ($isCell == 0) {
+      $regex = "/^[0-9]{10}$/g";
+    }
+
+    // Si on ajout $isCell en param, doit être obligatoirement un booléen
+    if (!is_bool($isCell)) {
+      return false;
+    }
+
+    $test_phone = preg_match($regex, trim($phone));
+
+    if ($test_phone == 1) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+  * Méthode pour vérifier le type de la variable
+  *
+  **/
+  public function checkTypeVariable($value)
+  {
+    // TODO
   }
 }
 
