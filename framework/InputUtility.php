@@ -114,17 +114,6 @@ class InputUtility
   }
 
   /**
-  * Récupère la valeur du tableau $_SERVER
-  *
-  * @param string $key       La valeur clée du tableau
-  * @param string $default   La valeur par défaut
-  **/
-  public static function server($key = null, $default = null)
-  {
-    return static::preventInjection($_SERVER[$key], $default);
-  }
-
-  /**
   * Indique la méthode utilisée dans al requête (GET, POST, PUT, etc...)
   * On vérifie si les requêtes PUT et DELETE son réécrites en POST
   *
@@ -134,66 +123,6 @@ class InputUtility
     $req_method = $_SERVER['REQUEST_METHOD'];
 
     return strtoupper($req_method);
-  }
-
-  /**
-  * Retourne le protocole HTTP de la requête
-  **/
-  public static function serverProtocol()
-  {
-    if (static::server('SERVER_PROTOCOL') !== null) {
-      $server = static::server('SERVER_PROTOCOL');
-      return $server;
-    }
-    else {
-      $server = "HTTP/1.1";
-      return $server;
-    }
-  }
-
-  /**
-  * Retourne "TRUE" si la requête a été éxecutée en HTTPS
-  **/
-  public static function isHttps()
-  {
-    if (strtoupper(static::server('HTTPS')) == "ON") {
-      return true;
-    }
-  }
-
-  /**
-  * Retourne l'adresse IP de la machine client.
-  * Si elle ne peut être obtenue, l'adresse sera 0.0.0.0
-  **/
-  public static function ip()
-  {
-    if (static::server('HTTP_CLIENT_IP') !== null) {
-      $ips[] = static::server('HTTP_CLIENT_IP');
-      // on va filter l'IP de la machine client afin de vérifier si c'est bien une adresse IP
-      foreach ($ips as $ip) {
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 || FILTER_FLAG_IPV6 || FILTER_FLAG_NO_PRIV_RANGE || FILTER_FLAG_NO_RES_RANGE)) {
-          return $ip;
-        }
-      }
-    }
-    else {
-      return static::server('REMOTE_ADDR', '0.0.0.0');
-    }
-  }
-
-  /**
-  * Retourne le port utilisé pour les communications.
-  * Si il ne peut être obtenu, le port sera 80
-  **/
-  public static function port()
-  {
-    if (static::server('SERVER_PORT') !== null) {
-      return static::server('SERVER_PORT');
-    }
-    else {
-      $default = "80";
-      return $default;
-    }
   }
 
   /**
@@ -218,4 +147,3 @@ class InputUtility
 
 
 ?>
-
