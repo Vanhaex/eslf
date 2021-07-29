@@ -81,14 +81,35 @@ class UserUtility
 
   /**
   * Méthode pour vérifier le type de la variable
+  * @param string $value La variable pour laquelle on souhaite connaitre le type
   *
   **/
   public function checkTypeVariable($value)
   {
-    // TODO
+    if (!isset($value)) {
+      return false;
+    }
+
+    $types = [
+      "string",
+      "integer",
+      "double",
+      "boolean",
+      "array",
+      "object",
+      "NULL",
+    ];
+
+    $vl = gettype($value);
+
+    if (in_array($value, $vl)) {
+      return true;
+    }
+    else {
+      echo "N/A";
+    }
   }
 }
-
 
 
 ?>
