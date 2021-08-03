@@ -1,6 +1,8 @@
 # ESLF
 
-![eslf_logo](./public/assets/images/eslf_logo.png "Logo ESLF")
+<p align="center">
+  <img src="./public/assets/images/eslf_logo.png" width="400">
+</p>
 
 ### ESLF est un simple framework pour écrire des applications web
 
