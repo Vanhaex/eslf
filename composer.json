@@ -14,7 +14,8 @@
     "require": {
       "php": "^7.1",
       "phpmailer/phpmailer": "^6.4",
-      "ext-mysqli":"*"
+      "ext-mysqli":"*",
+      "smarty/smarty": "^3.1"
     },
     "autoload": {
         "psr-4": {

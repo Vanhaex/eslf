@@ -20,8 +20,13 @@ ini_set("session.use_only_cookies", 1);
 // Autoloader
 require_once("../vendor/autoload.php");
 
+// Smarty Class
+require_once("../vendor/smarty/smarty/libs/Smarty.class.php");
+
 use Framework\Router;
 use Framework\Controller;
+
+$smarty = new Smarty();
 
 try
 {
@@ -35,12 +40,13 @@ try
 catch(\Framework\RouteException $e)
 {
   header("HTTP/1.1 404 Not Found");
-  echo "ERREUR 404"; // Temporaire, on va trouver des alternatives pour afficher une page prévue à cet effet
+  $smarty->setCompileDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'views_c' . DIRECTORY_SEPARATOR);
+  $smarty->display($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR . "404.tpl");
 }
 catch(\Exception $e)
 {
   header("HTTP/1.1 505 Internal Server Error");
-  echo "ERREUR 505"; // Temporaire, on va trouver des alternatives pour afficher une page prévue à cet effet
+  $smarty->display($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR . "500.tpl");
 }
 
 

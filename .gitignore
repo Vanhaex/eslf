@@ -1,4 +1,6 @@
-config
+config/app.config.php
+config/database.config.php
+config/routes.config.php
 vendor
 stats
 log/*

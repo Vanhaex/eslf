@@ -4,6 +4,8 @@ namespace Framework;
 
 use Smarty;
 
+require('../config/app.config.php');
+
 abstract class Controller
 {
 
@@ -18,7 +20,13 @@ abstract class Controller
         $this->smarty->setTemplateDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'views' .  DIRECTORY_SEPARATOR);
         $this->smarty->setCompileDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'views_c' . DIRECTORY_SEPARATOR);
         $this->smarty->setCacheDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'cache' . DIRECTORY_SEPARATOR);
-        $this->smarty->debugging = false;
+        if (CONFIG_DEBUG == "true") {
+          $this->smarty->debugging = true;
+        }
+        else {
+          $this->smarty->debugging = false;
+        }
+
     }
 
     return $this->smarty;
@@ -35,7 +43,7 @@ abstract class Controller
     $this->smarty->display($template);
   }
 
-  protected function redirect($path, $http_return_code)
+  public function redirect($path, $http_return_code)
   {
     if (is_null($http_return_code)) {
       $http_return_code = 200;
