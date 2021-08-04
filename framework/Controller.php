@@ -21,10 +21,12 @@ abstract class Controller
         $this->smarty->setCompileDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'views_c' . DIRECTORY_SEPARATOR);
         $this->smarty->setCacheDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'cache' . DIRECTORY_SEPARATOR);
         if (CONFIG_DEBUG == "true") {
-          $this->smarty->debugging = true;
+          $this->smarty->cache_lifetime = 0;
+          $this->smarty->setCaching(Smarty::CACHING_OFF);
         }
         else {
-          $this->smarty->debugging = false;
+          $this->smarty->cache_lifetime = 0;
+          $this->smarty->setCaching(Smarty::CACHING_OFF);
         }
 
     }
