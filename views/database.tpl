@@ -4,9 +4,9 @@
     <title>RÉSULTAT ddb !</title>
   </head>
   <body>
-    <form action="/ddbprep" method="post">
-      <label for="name">Entrez un nom : </label>
-      <input type="text" name="name" value="">
-    </form>
+    {foreach $resultat as $res}
+      <p>Le id : {$res->id}</p>
+      <p>Le résultat : {$res->name}</p>
+    {/foreach}
   </body>
 </html>

@@ -3,7 +3,7 @@
 namespace Framework;
 
 use Smarty;
-use Framework\ESDBaccess;
+use ESDBaccess\ESDBaccess;
 
 require('../config/app.config.php');
 require('../config/database.config.php');
@@ -62,8 +62,9 @@ abstract class Controller
 
   public function initDatabase()
   {
-    $this->esdbaccess = new ESDBaccess\ESDBaccess(CONFIG_DATABASE_HOST, CONFIG_DATABASE_USER, CONFIG_DATABASE_PASSWORD, CONFIG_DATABASE_DATABASE, CONFIG_DATABASE_PORT);
+    $this->esdbaccess = new ESDBaccess(CONFIG_DATABASE_HOST, CONFIG_DATABASE_USER, CONFIG_DATABASE_PASSWORD, CONFIG_DATABASE_DATABASE, CONFIG_DATABASE_PORT);
     $this->esdbaccess->connectToDB();
+    $this->esdbaccess->ESDBautocommit(CONFIG_DATABASE_TRANSACTIONS);
 
     return $this->esdbaccess;
   }
