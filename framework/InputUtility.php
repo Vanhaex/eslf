@@ -81,14 +81,14 @@ class InputUtility
   }
 
   /**
-  * Récupère la valeur du tableau $_SESSION
+  * Récupère la valeur d'une variable de session après l'avoir nettoyée
   *
   * @param string $key       La valeur clée du tableau
   * @param string $default   La valeur par défaut
   **/
-  public static function session($key = null, $default = null)
+  public static function session($sessionValue = null, $default = null)
   {
-    return static::preventInjection($_SESSION[$key], $default);
+    return static::preventInjection($sessionValue, $default);
   }
 
   /**
