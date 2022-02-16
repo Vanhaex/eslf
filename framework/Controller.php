@@ -3,7 +3,7 @@
 namespace Framework;
 
 use Smarty;
-use Framework\ESDBaccess;
+use ESDBaccess\ESDBaccess;
 
 require('../config/app.config.php');
 require('../config/database.config.php');
@@ -25,6 +25,7 @@ abstract class Controller
         $this->smarty->setTemplateDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'views' .  DIRECTORY_SEPARATOR);
         $this->smarty->setCompileDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'views_c' . DIRECTORY_SEPARATOR);
         $this->smarty->setCacheDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'cache' . DIRECTORY_SEPARATOR);
+        $this->smarty->setPluginsDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'smarty_plugins' . DIRECTORY_SEPARATOR);
         if (CONFIG_DEBUG == "true") {
           $this->smarty->cache_lifetime = 0;
           $this->smarty->setCaching(Smarty::CACHING_OFF);
@@ -62,8 +63,9 @@ abstract class Controller
 
   public function initDatabase()
   {
-    $this->esdbaccess = new ESDBaccess\ESDBaccess(CONFIG_DATABASE_HOST, CONFIG_DATABASE_USER, CONFIG_DATABASE_PASSWORD, CONFIG_DATABASE_DATABASE, CONFIG_DATABASE_PORT);
+    $this->esdbaccess = new ESDBaccess(CONFIG_DATABASE_HOST, CONFIG_DATABASE_USER, CONFIG_DATABASE_PASSWORD, CONFIG_DATABASE_DATABASE, CONFIG_DATABASE_PORT);
     $this->esdbaccess->connectToDB();
+    $this->esdbaccess->ESDBautocommit(true);
 
     return $this->esdbaccess;
   }
