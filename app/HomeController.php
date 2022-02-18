@@ -33,7 +33,7 @@ class HomeController extends Controller
         "resultat" => $resultat
     ];
 
-    $this->view('database.tpl', $params);
+    $this->view('database_prep.tpl', $params);
   }
 
 }

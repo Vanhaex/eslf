@@ -6,5 +6,6 @@ stats
 log/*
 views_c
 cache
+.idea
 
 composer.lock

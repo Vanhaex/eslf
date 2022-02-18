@@ -1,70 +1,54 @@
-<!DOCTYPE html>
-<html dir="ltr">
-  <head>
-    <title>Hello world !</title>
-  </head>
-  <body>
-    <div class="title">
-      <h1>ESLF</h1>
-      <h2><i>Easy, Simple and Lighweight Framework</i></h2>
+{extends file="_layouts/layout.tpl"}
+
+{block name=css}{/block}
+
+{block name=js}{/block}
+
+{block name=content}
+
+<div class="flex">
+  <div class="flex w-2/5 md:w-1/4 h-screen bg-white">
+    <div class="mx-auto py-10">
+      <h1 class="text-2xl font-bold mb-10 cursor-p duration-150">Fruitiers</h1>
+      <ul>
+        <li class="flex space-x-2 mt-10 cursor-pointer duration-150">
+          <i class="fa fa-home" ></i>
+          <span class="font-semibold">Accueil</span>
+        </li>
+        <li class="flex space-x-2 mt-10 cursor-pointer duration-150">
+          <i class="" ></i>
+          <span class="font-semibold">Liste des genres</span>
+        </li>
+        <li class="flex space-x-2 mt-10 cursor-pointer duration-150">
+          <i class="" ></i>
+          <span class="font-semibold">Rechercher une variété</span>
+        </li>
+        <li class="flex space-x-2 mt-10 cursor-pointer duration-150">
+          <i class="" ></i>
+          <span class="font-semibold">Profile</span>
+        </li>
+        <li class="flex space-x-2 mt-10 cursor-pointer duration-150">
+          <i class="" ></i>
+          <span class="font-semibold">Setting</span>
+        </li>
+        <button class="w-full mt-10 rounded-full py-1.5 text-white">Learn</button>
+      </ul>
     </div>
-    <div class="text-presentation">
-      <h4>Si vous voyez cette page, c'est bon !</h4>
-      <h4>Vous pouvez désormais modifier cette page comme bon vous semble !</h4>
-      <p>Bon, pas de bêtises par contre hein...</p>
-    </div>
-    <div class="credits">
-      <a href="https://github.com/Vanhaex" ><img id="github_logo" src="/public/assets/images/github_logo.png" alt="github logo"></a>
-      <a href="https://github.com/Vanhaex" ><img id="github_profile" src="/public/assets/images/github_profile.jpeg" alt="github profile pic"></a>
-    </div>
-  </body>
-</html>
+  </div>
+  <main class=" min-h-screen w-full">
+    <nav class="flex justify-between px-10 bg-white py-6">
+      <div class="flex items-center bg-gray-100 px-4 py-2 rounded-md space-x-3 w-96">
+        <input type="text" placeholder="search" class="bg-gray-100 outline-none w-full" />
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 cursor-pointer text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+      <div class="flex items-center">
+        <i class="fa fa-user" ></i>
+        <p>Elon Musk</p>
+      </div>
+    </nav>
+  </main>
+</div>
 
-<style media="screen">
-  body {
-    font-family: Inter,sans-serif;
-    text-align: center;
-  }
-
-  .title {
-    margin-top: 5rem;
-  }
-
-  .title h1{
-    font-size: 4rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .text-presentation {
-    border: 1px solid #1e99ff;
-    background-color: #1e99ff;
-    color: #FFF;
-    border-radius: 0.75rem;
-    margin-left: 40rem;
-    margin-right: 40rem;
-    margin-top: 6rem;
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3),0 4px 6px -2px rgba(0,0,0,0.05);
-  }
-
-  .credits {
-    margin-bottom: 1.2rem;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-  }
-
-  #github_logo {
-    border-right: 1px solid lightgrey;
-    padding-right: 10px;
-    height: 2rem;
-    width: 2rem;
-  }
-
-  #github_profile {
-    padding-left: 6px;
-    height: 2rem;
-    width: 2rem;
-    border-radius: 50%;
-  }
-</style>
+{/block}
