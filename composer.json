@@ -1,5 +1,5 @@
 {
-    "name": "bin/eslf/vanhaex",
+    "name": "eslf/vanhaex",
     "version": "1.0.0",
     "description": "Easy, Simple and Lightweight web Framework for creating web applications",
     "type": "project",

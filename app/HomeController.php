@@ -4,6 +4,7 @@ namespace App;
 
 use Framework\InputUtility;
 use Framework\Controller;
+use Framework\View;
 
 class HomeController extends Controller
 {
