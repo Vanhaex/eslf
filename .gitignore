@@ -1,4 +1,4 @@
-config/app.config.php
+config/AppConfig.php
 config/database.config.php
 config/routes.config.php
 vendor

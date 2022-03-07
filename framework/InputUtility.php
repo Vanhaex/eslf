@@ -16,6 +16,20 @@ class InputUtility
   const OVERRIDE = 'HTTP_X_HTTP_METHOD_OVERRIDE';
 
   /**
+   * Variable contenant toutes les données passées à la soumission d'une requête
+   *
+   * @var array
+   */
+  protected static $dataArray = array();
+
+  /**
+   * Variable contenant le corps de la requête en brut
+   *
+   * @var string
+   */
+  protected static $body = 'php://input';
+
+  /**
   * Un array content les termes qui doivent être exclus pour éviter l'injection SQL
   *
   * @var array
@@ -33,7 +47,8 @@ class InputUtility
   *
   * @param string $value          La valeur du tableau associatif ($_GET, $_POST, etc...)
   * @param string $defaultValue   Une valeur par défaut
-  **/
+  * @return mixed
+   **/
   protected static function preventInjection($value, $defaultValue)
   {
     if (isset($value)) {
@@ -45,6 +60,69 @@ class InputUtility
     }
   }
 
+  /**
+   * Prévient des injections sql et noSQL pour les valeurs d'un tableau
+   *
+   * @param $array
+   * @param $values
+   * @param $defaultValue
+   * @return mixed
+   */
+  protected static function preventInjectionArray($array, $values, $defaultValue)
+  {
+    if ($values === null){
+      return $array;
+    }
+
+    if (isset($array[$values])){
+      $value = str_replace(InputUtility::INJECTION_PROTECTION_KEY, '', $array[$values]);
+      return htmlspecialchars($value, ENT_QUOTES);
+    }
+    else {
+      return $defaultValue;
+    }
+  }
+
+  /**
+   * Vérifie des données ont été passées dans la requête
+   *
+   * @param mixed $keys
+   * @return bool
+   */
+  public static function getData($keys): bool
+  {
+    foreach ((array) $keys as $key) {
+      if (trim(self::returnInputData($key)) == '') {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Vérifie si l'une des données du tableau a été soumise via la méthode GET ou POST
+   *
+   */
+  public static function submitted(): array
+  {
+    if (!empty(static::$dataArray)) {
+      return static::$dataArray;
+    }
+    parse_str(static::$body, $input);
+    return static::$dataArray = $_GET + $_POST + $input;
+  }
+
+  /**
+   * Retourne les valeurs qui ont été passées dans une requête
+   *
+   * @param null $key
+   * @param null $defaultValue
+   * @return mixed
+   */
+  public static function returnInputData($key = null, $defaultValue = null)
+  {
+    return self::preventInjectionArray(self::submitted(), $key, $defaultValue);
+  }
 
   /**
   * Récupère la valeur du tableau $_GET
@@ -52,7 +130,7 @@ class InputUtility
   * @param string $key       La valeur clée du tableau
   * @param string $default   La valeur par défaut
   **/
-  public static function get($key = null, $default = null)
+  public static function get($key = null, $default = null): string
   {
     return static::preventInjection($_GET[$key], $default);
   }
@@ -63,7 +141,7 @@ class InputUtility
   * @param string $key       La valeur clée du tableau
   * @param string $default   La valeur par défaut
   **/
-  public static function post($key = null, $default = null)
+  public static function post($key = null, $default = null): string
   {
     return static::preventInjection($_POST[$key], $default);
   }
@@ -75,7 +153,7 @@ class InputUtility
   * @param string $type      Le type de donnée associé au fichier (nom, taille, etc...)
   * @param string $default   La valeur par défaut
   **/
-  public static function file($key = null, $type = null, $default = null)
+  public static function file($key = null, $type = null, $default = null): string
   {
     return static::preventInjection($_FILES[$key][$type], $default);
   }
@@ -86,7 +164,7 @@ class InputUtility
   * @param string $key       La valeur clée du tableau
   * @param string $default   La valeur par défaut
   **/
-  public static function session($sessionValue = null, $default = null)
+  public static function session($sessionValue = null, $default = null): string
   {
     return static::preventInjection($sessionValue, $default);
   }
@@ -97,7 +175,7 @@ class InputUtility
   * @param string $key       La valeur clée du tableau
   * @param string $default   La valeur par défaut
   **/
-  public static function cookie($key = null, $default = null)
+  public static function cookie($key = null, $default = null): string
   {
     return static::preventInjection($_COOKIE[$key], $default);
   }
@@ -108,7 +186,7 @@ class InputUtility
   * @param string $key       La valeur clée du tableau
   * @param string $default   La valeur par défaut
   **/
-  public static function env($key = null, $default = null)
+  public static function env($key = null, $default = null): string
   {
     return static::preventInjection($_ENV[$key], $default);
   }
@@ -119,7 +197,7 @@ class InputUtility
   * @param string $key       La valeur clée du tableau
   * @param string $default   La valeur par défaut
   **/
-  public static function server($key = null, $default = null)
+  public static function server($key = null, $default = null): string
   {
     return static::preventInjection($_SERVER[$key], $default);
   }
@@ -129,7 +207,7 @@ class InputUtility
   * On vérifie si les requêtes PUT et DELETE son réécrites en POST
   *
   **/
-  public static function request_method()
+  public static function request_method(): string
   {
     $req_method = $_SERVER['REQUEST_METHOD'];
 
@@ -139,7 +217,7 @@ class InputUtility
   /**
   * Retourne le protocole HTTP de la requête
   **/
-  public static function serverProtocol()
+  public static function serverProtocol(): string
   {
     if (static::server('SERVER_PROTOCOL') !== null) {
       $server = static::server('SERVER_PROTOCOL');
@@ -185,7 +263,7 @@ class InputUtility
   * Retourne le port utilisé pour les communications.
   * Si il ne peut être obtenu, le port sera 80
   **/
-  public static function port()
+  public static function port(): string
   {
     if (static::server('SERVER_PORT') !== null) {
       return static::server('SERVER_PORT');

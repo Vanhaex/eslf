@@ -6,7 +6,7 @@
   </head>
   <body style="text-align:center;" >
     <h3>Erreur 404 - URL non trouvé</h3>
-    <h5>La requête spécifiée n'a pas été trouvée</h5>
+    <h5>La ressource ou la page demandée n'a pas été trouvée</h5>
     <a href="/">Revenir à l'accueil</a>
   </body>
 </html>

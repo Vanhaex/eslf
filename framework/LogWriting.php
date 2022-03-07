@@ -2,8 +2,6 @@
 
 namespace Framework;
 
-require_once('../config/app.config.php');
-
 class LogWriting
 {
   private $filename;

@@ -4,7 +4,6 @@ namespace App;
 
 use Framework\InputUtility;
 use Framework\Controller;
-use Framework\View;
 
 class HomeController extends Controller
 {
@@ -19,22 +18,20 @@ class HomeController extends Controller
     $this->view('home.tpl');
   }
 
-  public function test($id)
+  public function test()
   {
-    echo "Le ID est égal à : " . $id;
+    $this->view('test.tpl');
   }
 
-  public function testdb()
+  public function testpost()
   {
-    $this->esdbaccess->querySelect("test_table", null, null);
-
-    $resultat = $this->esdbaccess->allResults();
+    $value = InputUtility::post("nom");
 
     $params = [
-        "resultat" => $resultat
+        "afficher_nom" => $value
     ];
 
-    $this->view('database_prep.tpl', $params);
+    $this->view('resultattest.tpl', $params);
   }
 
 }

@@ -4,7 +4,6 @@ namespace Framework;
 
 use ESDBaccess\ESDBaccess;
 
-require('../config/app.config.php');
 require('../config/database.config.php');
 
 abstract class Controller

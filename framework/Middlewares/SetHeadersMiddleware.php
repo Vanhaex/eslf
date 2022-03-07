@@ -21,11 +21,13 @@ class SetHeadersMiddleware
             "X-XSS-Protection" => "1;mode=block",
             "Content-Type" => "text/html",
             "Access-Control-Allow-Origin" => "Deny",
-            "X-Powered-By" => "ESLF Framework"
         ];
 
         foreach ($headersArray as $key => $value){
             header($key . ': ' . $value);
         }
+
+        // On retire l'en-tête 'X-Powered-By'.
+        header_remove("X-Powered-By");
     }
 }
