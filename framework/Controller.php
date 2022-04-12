@@ -3,8 +3,7 @@
 namespace Framework;
 
 use ESDBaccess\ESDBaccess;
-
-require('../config/database.config.php');
+use Config\DatabaseConfig;
 
 abstract class Controller
 {
@@ -42,9 +41,9 @@ abstract class Controller
 
   public function initDatabase()
   {
-    $this->esdbaccess = new ESDBaccess(CONFIG_DATABASE_HOST, CONFIG_DATABASE_USER, CONFIG_DATABASE_PASSWORD, CONFIG_DATABASE_DATABASE, CONFIG_DATABASE_PORT);
+    $this->esdbaccess = new ESDBaccess(DatabaseConfig::getDatabaseHost(), DatabaseConfig::getDatabaseUser(), DatabaseConfig::getDatabasePassword(), DatabaseConfig::getDatabaseDbName(), DatabaseConfig::getDatabasePort());
     $this->esdbaccess->connectToDB();
-    $this->esdbaccess->ESDBautocommit(true);
+    $this->esdbaccess->ESDBautocommit(DatabaseConfig::getDatabaseTransactionMode());
 
     return $this->esdbaccess;
   }

@@ -1,5 +1,5 @@
 config/AppConfig.php
-config/database.config.php
+config/DatabaseConfig.php
 config/routes.config.php
 vendor
 stats

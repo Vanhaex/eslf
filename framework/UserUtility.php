@@ -39,7 +39,7 @@ class UserUtility
 
     // La vilaine regex qui va vérifier l'adresse mail
     $regex = "/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g";
-    $test_email = ($regex, trim($email_to_check));
+    $test_email = preg_match($regex, trim($email_to_check));
 
     if ($test_email == 1) {
       return true;
@@ -52,10 +52,10 @@ class UserUtility
   * Méthode pour vérifier la validité d'un numéro de téléphone. on peut préciser si c'est un fixe ou un portable
   * Par défaut on vérifie le num de portable
   * @param string $phone
-  * @param bool $isCell
+  * @param int $isCell
   *
   **/
-  public function checkPhoneNumber(string $phone, bool $isCell = 1)
+  public function checkPhoneNumber(string $phone, int $isCell = 1)
   {
     // Si on vérifie le numero de portable
     if ($isCell == 1) {
@@ -63,6 +63,9 @@ class UserUtility
     }
     elseif ($isCell == 0) {
       $regex = "/^[0-9]{10}$/g";
+    }
+    else {
+      return false;
     }
 
     // Si on ajout $isCell en param, doit être obligatoirement un booléen
@@ -80,10 +83,12 @@ class UserUtility
   }
 
   /**
-  * Méthode pour vérifier le type de la variable
-  * @param string $value La variable pour laquelle on souhaite connaitre le type
-  *
-  **/
+   * Méthode pour vérifier le type de la variable
+   * @param string $value La variable pour laquelle on souhaite connaitre le type
+   *
+   *
+   * @return bool
+   */
   public function checkTypeVariable($value)
   {
     if (!isset($value)) {

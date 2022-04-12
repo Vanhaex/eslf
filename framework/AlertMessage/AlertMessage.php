@@ -8,7 +8,7 @@ class AlertMessage
 {
     private $session;
 
-    private function sessionAlertMessage()
+    public function __construct()
     {
         $this->session = SessionUtility::getInstance();
     }

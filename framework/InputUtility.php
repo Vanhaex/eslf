@@ -159,14 +159,20 @@ class InputUtility
   }
 
   /**
-  * Récupère la valeur d'une variable de session après l'avoir nettoyée
-  *
-  * @param string $key       La valeur clée du tableau
-  * @param string $default   La valeur par défaut
-  **/
-  public static function session($sessionValue = null, $default = null): string
+   * Récupère la valeur d'une variable de session après l'avoir nettoyée
+   *
+   * @param null $sessionValue
+   * @param string $default La valeur par défaut
+   */
+  public static function session($sessionValue = null, $default = null)
   {
-    return static::preventInjection($sessionValue, $default);
+    if (isset($sessionValue)) {
+      $sessionValue = str_replace(InputUtility::INJECTION_PROTECTION_KEY, '', $sessionValue);
+      return $sessionValue;
+    }
+    else {
+      return $default;
+    }
   }
 
   /**

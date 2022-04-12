@@ -1,0 +1,13 @@
+<?php
+
+namespace {{ namespace }};
+
+use Framework\InputUtility;
+use Framework\Controller;
+
+class HomeController extends Controller
+{
+    // Controller généré grâce à ESBuilder !
+}
+
+?>

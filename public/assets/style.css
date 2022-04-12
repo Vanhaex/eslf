@@ -1,0 +1,7 @@
+.alert-message {
+    padding: 6px 10px;
+    border-left-width: 0;
+    border-radius: 3px;
+    color: #A94442;
+    background-color: #F6C6C6;
+}

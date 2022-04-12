@@ -1,9 +1,10 @@
 <?php
 
-namespace App;
+namespace App\controller;
 
 use Framework\InputUtility;
 use Framework\Controller;
+use Framework\AlertMessage\AlertMessage;
 
 class HomeController extends Controller
 {
@@ -23,15 +24,15 @@ class HomeController extends Controller
     $this->view('test.tpl');
   }
 
-  public function testpost()
+  public function testalerte()
   {
-    $value = InputUtility::post("nom");
+    $value = "Bonjour, je suis une alerte";
 
-    $params = [
-        "afficher_nom" => $value
-    ];
+    $alert = new AlertMessage();
 
-    $this->view('resultattest.tpl', $params);
+    $alert->addAlertMessage($value, "danger");
+
+    $this->view('resultattest.tpl');
   }
 
 }

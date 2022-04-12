@@ -22,7 +22,9 @@ class View
             self::$smarty->setTemplateDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'views' .  DIRECTORY_SEPARATOR);
             self::$smarty->setCompileDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'views_c' . DIRECTORY_SEPARATOR);
             self::$smarty->setCacheDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'cache' . DIRECTORY_SEPARATOR);
-            self::$smarty->setPluginsDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'smarty_plugins' . DIRECTORY_SEPARATOR);
+            self::$smarty->setPluginsDir(array(
+                                            SMARTY_PLUGINS_DIR,
+                                            $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'smarty_plugins' . DIRECTORY_SEPARATOR));
             if (AppConfig::CONFIG_DEBUG == "true") {
                 self::$smarty->caching = false;
                 self::$smarty->cache_lifetime = 0;
