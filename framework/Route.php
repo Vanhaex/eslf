@@ -41,7 +41,7 @@ class Route {
       $method = trim($this->method);
 
       if(substr($this->controller, 0,1) != '\\'){
-        $controller = 'App\\' . $this->controller;
+        $controller = 'App\\controller\\' . $this->controller;
       }
 
       if (class_exists($controller)) {

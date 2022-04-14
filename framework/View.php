@@ -25,7 +25,7 @@ class View
             self::$smarty->setPluginsDir(array(
                                             SMARTY_PLUGINS_DIR,
                                             $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'smarty_plugins' . DIRECTORY_SEPARATOR));
-            if (AppConfig::CONFIG_DEBUG == "true") {
+            if (AppConfig::getDebug() == "true") {
                 self::$smarty->caching = false;
                 self::$smarty->cache_lifetime = 0;
                 self::$smarty->setCaching(Smarty::CACHING_OFF);
@@ -62,7 +62,7 @@ class View
         header("HTTP/1.1 500 Internal Server Error");
 
         // Affichage du message si erreur 500
-        if (AppConfig::CONFIG_DEBUG == "true") {
+        if (AppConfig::getDebug() == "true") {
             self::$smarty->assign('detail_exception', 'Détails de l\'erreur : ' . $message);
         }
         self::$smarty->display($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR . "500.tpl");

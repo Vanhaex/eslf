@@ -2,8 +2,10 @@
 
 namespace Framework;
 
+use Config\AppConfig;
 use ESDBaccess\ESDBaccess;
-use Config\DatabaseConfig;
+
+require_once("config/database.example.config.php");
 
 abstract class Controller
 {
@@ -14,7 +16,12 @@ abstract class Controller
   public function __construct()
   {
     // on instancie les variables pour les réutiliser dans les controlleurs
-    $this->esdbaccess = $this->initDatabase();
+    // Si on a besoin de se connecter à une bdd, on instancie l'objet
+    if (AppConfig::getActivateDatabase() == true){
+      $this->esdbaccess = $this->initDatabase();
+    }
+
+    // On initialise Smarty (cache, dossier des plugins, etc...)
     $this->smarty = View::initView();
   }
 
@@ -41,9 +48,9 @@ abstract class Controller
 
   public function initDatabase()
   {
-    $this->esdbaccess = new ESDBaccess(DatabaseConfig::getDatabaseHost(), DatabaseConfig::getDatabaseUser(), DatabaseConfig::getDatabasePassword(), DatabaseConfig::getDatabaseDbName(), DatabaseConfig::getDatabasePort());
+    $this->esdbaccess = new ESDBaccess(EX_CONFIG_DATABASE_HOST, EX_CONFIG_DATABASE_USER, EX_CONFIG_DATABASE_PASSWORD, EX_CONFIG_DATABASE_DATABASE, EX_CONFIG_DATABASE_PORT);
     $this->esdbaccess->connectToDB();
-    $this->esdbaccess->ESDBautocommit(DatabaseConfig::getDatabaseTransactionMode());
+    $this->esdbaccess->ESDBautocommit(true);
 
     return $this->esdbaccess;
   }

@@ -25,6 +25,6 @@ class VersionCommand extends Command
     {
         $output->writeln("ESLF v1.0.0");
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
