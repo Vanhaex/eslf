@@ -26,11 +26,11 @@ class HomeController extends Controller
 
   public function testalerte()
   {
-    $value = "Bonjour, je suis une alerte";
+    $value = "Bonjour, je suis une sdsqdqd";
 
     $alert = new AlertMessage();
 
-    $alert->addAlertMessage($value, "danger");
+    $alert->addAlertMessage($value, "warning");
 
     $this->view('resultattest.tpl');
   }

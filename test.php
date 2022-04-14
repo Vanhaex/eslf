@@ -1,28 +1,29 @@
 <?php
 
-// Il faut le fichier Application.php pour utiliser l'utilitaire esbuilder !
-$file = "Application.php";
-$arguments = null; // Pas d'arguments de base
+require_once("vendor/autoload.php");
 
-if (file_exists($file)) {
+use Framework\Command\VersionCommand;
+use Symfony\Component\Console\Application;
 
-    array_shift($argv);
+$namespace = "Framework\Command\\";
 
-    foreach ($argv as $param) {
-        $arguments .= " " . $param;
-    }
+$application = new Application();
 
-    exec("php " . $file . $arguments, $output);
+$commandArrays = [
+    "AboutCommand",
+    "VersionCommand",
+    "ControllerCommand"
+];
 
-    echo("\n");
-    for ($i=1;$i < count($output);$i++){
-        echo $output[$i];
-    }
-    echo("\n\n");
-
-} else {
-    echo "\n";
-    echo "Impossible de lancer la commande esbuilder car le fichier " . $file . " semble inexistant";
-    echo "\n\n";
+foreach ($commandArrays as $cmd){
+    $command = $namespace . $cmd;
+    $application->add(new $command());
 }
 
+$application->add($default = new VersionCommand());
+
+// La commande about par défaut qui présente le framework
+$application->setDefaultCommand($default->getName());
+$application->run();
+
+?>

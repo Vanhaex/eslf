@@ -12,7 +12,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-      "php": "^7.1",
+      "php": "^7.4",
       "phpmailer/phpmailer": "^6.4",
       "ext-mysqli":"*",
       "smarty/smarty": "^4",

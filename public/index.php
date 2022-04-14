@@ -60,7 +60,7 @@ try
    * le désactiver avant la mise en production !
    * -------------------------------------------------------------
    */
-  if (AppConfig::CONFIG_DEBUG == "true") {
+  if (AppConfig::getDebug() == "true") {
       ini_set('display_errors', 1);
       ini_set('display_startup_errors', 1);
       error_reporting(E_ALL); // Toutes les erreurs sauf le level "Notice"

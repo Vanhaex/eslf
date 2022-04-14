@@ -23,9 +23,11 @@ function smarty_function_add_alert_message()
 
     $string = "<div>";
 
-    $string .= "<div class='alert-message' >";
-    $string .= "<strong>Erreur : </strong>";
-    $string .= "<p>Un simple message d'erreur</p>";
+    foreach ($alerts as $alert){
+        $string .= "<div class='alert-message-{$alert->getStatus()}' >";
+            $string .= "<p>{$alert->getMessage()}</p>";
+        $string .= "</div>";
+    }
 
     $string .= "</div>";
 

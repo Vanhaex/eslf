@@ -1,38 +1,6 @@
 {extends file="_layouts/layout.tpl"}
 
 {block name=css}
-  <link href="/public/assets/style.css" rel="stylesheet" type="text/css" >
-  <style media="screen">
-    body {
-      font-family: Inter,sans-serif;
-      text-align: center;
-    }
-    .title {
-      margin-top: 5rem;
-    }
-    .title h1{
-      font-size: 4rem;
-      margin-bottom: 0.75rem;
-    }
-    .credits {
-      margin-bottom: 1.2rem;
-      position: fixed;
-      left: 0;
-      width: 100%;
-    }
-    #github_logo {
-      border-right: 1px solid lightgrey;
-      padding-right: 10px;
-      height: 4rem;
-      width: 4rem;
-    }
-    #github_profile {
-      padding-left: 6px;
-      height: 4rem;
-      width: 4rem;
-      border-radius: 50%;
-    }
-  </style>
 {/block}
 
 {block name=js}{/block}
