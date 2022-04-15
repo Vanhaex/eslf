@@ -66,7 +66,8 @@ class ControllerCommand extends Command
 
             // On va créér le dossier s'il n'existe pas déjà
             if (!file_exists($path_to_controller . DIRECTORY_SEPARATOR . $folder)){
-                mkdir($path_to_controller . DIRECTORY_SEPARATOR . $folder, 0777, true);
+                print "\nCréation du dossier ".$folder."\n\n";
+                mkdir($path_to_controller . DIRECTORY_SEPARATOR . $folder, 0775, true);
             }
         }
 
@@ -86,6 +87,7 @@ class ControllerCommand extends Command
 
     private function getControllerSourceScript()
     {
+        print "On récupère le template source\n\n";
         return $_SERVER["DOCUMENT_ROOT"] . self::SCRIPTS_PATH . "controller.script";
     }
 
@@ -94,6 +96,8 @@ class ControllerCommand extends Command
         if (empty($script) || empty($namespace) || empty($classname)){
             return false;
         }
+
+        print "On remplace les variables du template par les noms données en arguments\n\n";
 
         $script = file_get_contents($script);
 
