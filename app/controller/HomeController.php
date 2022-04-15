@@ -11,6 +11,8 @@ class HomeController extends Controller
 
   public function index()
   {
+    //$this->log->write("testlog.log", "WARNING", "Ecriture dans le dossier gestion du fichier");
+
     $this->view('home.tpl');
   }
 

@@ -13,7 +13,8 @@ $application = new Application();
 $commandArrays = [
     "AboutCommand",
     "VersionCommand",
-    "ControllerCommand"
+    "ControllerCommand",
+    "CacheCommand"
 ];
 
 foreach ($commandArrays as $cmd){
