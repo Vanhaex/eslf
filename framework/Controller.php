@@ -12,6 +12,7 @@ abstract class Controller
 
   protected $smarty;
   protected $esdbaccess;
+  protected $log;
 
   public function __construct()
   {
@@ -19,6 +20,10 @@ abstract class Controller
     // Si on a besoin de se connecter à une bdd, on instancie l'objet
     if (AppConfig::getActivateDatabase() == true){
       $this->esdbaccess = $this->initDatabase();
+    }
+
+    if (AppConfig::getActivateLogs() == true){
+      $this->log = new LogWriting();
     }
 
     // On initialise Smarty (cache, dossier des plugins, etc...)

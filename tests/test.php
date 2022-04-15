@@ -12,14 +12,7 @@ require_once("vendor/autoload.php");
 
 use Framework\LogWriting;
 
-$log = new LogWriting();
 
-try {
-    $log->write("testlog.txt", "ERROR", "Bonjour je suis une ligne de log");
-}
-catch (Exception $e){
-    echo $e;
-}
 
 
 
