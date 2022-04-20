@@ -3,6 +3,7 @@
 namespace Framework;
 
 use Config\AppConfig;
+use Framework\LogWriting;
 use Smarty;
 
 class View
@@ -48,6 +49,8 @@ class View
     public static function error404()
     {
         header("HTTP/1.1 404 Not Found");
+        $log = new LogWriting();
+        $log->write("testlog.log", "WARNING", "HTTP/1.1 404 Not Found");
         self::$smarty->display($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR . "404.tpl");
         exit(); // On arrête l'exécution du script au cas où
     }
@@ -65,6 +68,8 @@ class View
         if (AppConfig::getDebug() == "true") {
             self::$smarty->assign('detail_exception', 'Détails de l\'erreur : ' . $message);
         }
+        $log = new LogWriting();
+        $log->write("testlog.log", "ERROR", "HTTP/1.1 500 Internal Server Error. " . $message);
         self::$smarty->display($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR . "500.tpl");
         exit(); // On arrête l'exécution du script au cas où
     }

@@ -57,7 +57,7 @@ class CacheCommand extends Command
                 print "\nOption all : Vidage du cache pour les vues\n";
             }
             else {
-                statusCommandHandler::error("Le dossier 'views_c' n'est pas pas un dossier ou est inaccessible en lecture", $output);
+                statusCommandHandler::error("Le dossier 'views_c' n'est pas pas un dossier ou est inaccessible en lecture");
                 return Command::FAILURE;
             }
         }

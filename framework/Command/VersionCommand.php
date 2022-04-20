@@ -23,7 +23,7 @@ class VersionCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("ESLF v1.0.0");
+        $output->writeln("ESLF v0.0.0");
 
         return Command::SUCCESS;
     }

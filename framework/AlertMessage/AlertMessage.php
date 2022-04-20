@@ -17,10 +17,10 @@ class AlertMessage
      * Créé un message d'alerte en tant de variable de session
      *
      * @param $message
-     * @param $status
+     * @param string $status
      * @return void
      */
-    public function addAlertMessage($message, $status = "success")
+    public function addAlertMessage($message, string $status = "success")
     {
         if ($this->session->hasSession("alert_messages"))
         {

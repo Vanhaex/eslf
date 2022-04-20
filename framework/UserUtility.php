@@ -9,10 +9,10 @@ namespace Framework;
 class UserUtility
 {
   /**
-  * Méthode pour cacher une partie de l'email
-  * @param string $email_address
-  * @return $result
-  **/
+   * Méthode pour cacher une partie de l'email
+   * @param string $email_address
+   * @return string $result
+   */
   public function HideEmail(string $email_address)
   {
     $em = $email_address;
@@ -27,10 +27,11 @@ class UserUtility
   }
 
   /**
-  * Méthode pour vérifier la validité d'une adresse email
-  * @param string $email_to_check
-  *
-  **/
+   * Méthode pour vérifier la validité d'une adresse email
+   * @param string $email_to_check
+   *
+   * @return bool
+   */
   public function checkEmail(string $email_to_check)
   {
     if ($email_to_check == null || $email_to_check == "") {
@@ -38,7 +39,7 @@ class UserUtility
     }
 
     // La vilaine regex qui va vérifier l'adresse mail
-    $regex = "/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g";
+    $regex = "/[a-z\d!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z\d!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z\d](?:[a-z\d-]*[a-z\d])?\.)+[a-z\d](?:[a-z\d-]*[a-z\d])?/";
     $test_email = preg_match($regex, trim($email_to_check));
 
     if ($test_email == 1) {
@@ -49,20 +50,21 @@ class UserUtility
   }
 
   /**
-  * Méthode pour vérifier la validité d'un numéro de téléphone. on peut préciser si c'est un fixe ou un portable
-  * Par défaut on vérifie le num de portable
-  * @param string $phone
-  * @param int $isCell
-  *
-  **/
+   * Méthode pour vérifier la validité d'un numéro de téléphone. on peut préciser si c'est un fixe ou un portable
+   * Par défaut on vérifie le num de portable
+   * @param string $phone
+   * @param int $isCell
+   *
+   * @return bool
+   */
   public function checkPhoneNumber(string $phone, int $isCell = 1)
   {
     // Si on vérifie le numero de portable
     if ($isCell == 1) {
-      $regex = "/^(06|07)(?!0+$)[0-9]{8}$/g";
+      $regex = "/^(06|07)(?!0+$)\d{8}$/";
     }
     elseif ($isCell == 0) {
-      $regex = "/^[0-9]{10}$/g";
+      $regex = "/^\d{10}$/";
     }
     else {
       return false;
@@ -89,7 +91,7 @@ class UserUtility
    *
    * @return bool
    */
-  public function checkTypeVariable($value)
+  public function checkTypeVariable(string $value)
   {
     if (!isset($value)) {
       return false;
@@ -107,12 +109,11 @@ class UserUtility
 
     $vl = gettype($value);
 
-    if (in_array($value, $vl)) {
+    if (in_array($vl, $types)) {
       return true;
     }
-    else {
-      echo "N/A";
-    }
+
+    return "N/A";
   }
 }
 

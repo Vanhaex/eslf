@@ -2,40 +2,37 @@
 
 namespace Framework\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Output\OutputInterface;
-
 class StatusCommandHandler
 {
-    public static function success($text, OutputInterface $output)
+    public static function success($text)
     {
-        return self::writeOutput($text, "success", $output);
+        echo self::writeOutput($text, "success");
     }
 
-    public static function error($text, OutputInterface $output)
+    public static function error($text)
     {
-        return self::writeOutput($text, "error", $output);
+        echo self::writeOutput($text, "error");
     }
 
-    public static function warning($text, OutputInterface $output)
+    public static function warning($text)
     {
-        return self::writeOutput($text, "warning", $output);
+        echo self::writeOutput($text, "warning");
     }
 
-    private static function writeOutput($text, $type, OutputInterface $output)
+    private static function writeOutput($text, $type)
     {
         $ouputcmd = null;
 
         if ($type == "success"){
-            $ouputcmd = "\n<info>".trim($text)."</info>\n";
+            $ouputcmd = "\n\e[32m".trim($text)."\e[0m\n\n";
         }
         elseif ($type == "error"){
-            $ouputcmd = "\n<error>".trim($text)."</error>\n";
+            $ouputcmd = "\n\e[31m".trim($text)."\e[0m\n\n";
         }
         elseif ($type == "warning"){
-            $ouputcmd = "\n<comment>".trim($text)."</comment>\n";
+            $ouputcmd = "\n\e[33m".trim($text)."\e[0m\n\n";
         }
 
-        return $output->writeln($ouputcmd);
+        return $ouputcmd;
     }
 }

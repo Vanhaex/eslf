@@ -46,7 +46,7 @@ class Middleware
             $MiddlewareClass = self::MIDDLEWARE_NAMESPACE . $class . "Middleware";
 
             // La méthode statique "execute" propre à tous les middlewares créés
-            $MiddlewareClass::execute();
+            call_user_func($MiddlewareClass . "::execute");
         }
 
         return false;
