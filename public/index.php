@@ -27,6 +27,7 @@ use Framework\RouteException;
 use Framework\SessionUtility;
 use Framework\View;
 use Config\AppConfig;
+use Config\RoutesConfig;
 
 $smarty = View::initView();
 $session = SessionUtility::getInstance();
@@ -34,51 +35,51 @@ $session = SessionUtility::getInstance();
 try
 {
     /*
-   * -------------------------------------------------------------
-   * Middlewares
-   *
-   * On va appeler tous les middlewares que l'on a défini qui vont
-   * traiter la requête qui a été soumise. Par exemple, les
-   * middlewares par défaut vont ajouter les en-têtes HTTP standard
-   * et la vérification du jeton CSRF.
-   * Il est possible d'ajouter plus de middlewares
-   * -------------------------------------------------------------
-   */
-  Middleware::process("SetHeaders");
-  Middleware::process("VerifyCSRF");
-  //Middleware::process("FooBar");
+     * -------------------------------------------------------------
+     * Mode debug
+     *
+     * Le mode debug est très pratique, il permet d'afficher les
+     * messages d'erreurs PHP. Vous pouvez activer ou désactiver
+     * ce mode en modifiation la valeur de la variable CONFIG_DEBUG
+     * dans le fichier de config AppConfig.php. Assurez-vous de
+     * le désactiver avant la mise en production !
+     * -------------------------------------------------------------
+     */
+    if (AppConfig::getDebug() == "true") {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL); // Toutes les erreurs sauf le level "Notice"
+    }
+
+    /*
+    * -------------------------------------------------------------
+    * Middlewares
+    *
+    * On va appeler tous les middlewares que l'on a défini qui vont
+    * traiter la requête qui a été soumise. Par exemple, les
+    * middlewares par défaut vont ajouter les en-têtes HTTP standard
+    * et la vérification du jeton CSRF.
+    * Il est possible d'ajouter plus de middlewares
+    * -------------------------------------------------------------
+    */
+    Middleware::process("SetHeaders");
+    Middleware::process("VerifyCSRF");
+
+    /*
+    * -------------------------------------------------------------
+    * Le routage
+    *
+    * On va appeler les classes qui s'occupent du routage.
+    * Vous pouvez ajouter des routes dans le fichier de config
+    * RoutesConfig.php
+    * -------------------------------------------------------------
+    */
+    $router = new Router();
+    $router = RoutesConfig::getRoutes($router);
+    $render = $router->run();
+    echo $render;
 
 
-  /*
-   * -------------------------------------------------------------
-   * Mode debug
-   *
-   * Le mode debug est très pratique, il permet d'afficher les
-   * messages d'erreurs PHP. Vous pouvez activer ou désactiver
-   * ce mode en modifiation la valeur de la variable CONFIG_DEBUG
-   * dans le fichier de config AppConfig.php. Assurez-vous de
-   * le désactiver avant la mise en production !
-   * -------------------------------------------------------------
-   */
-  if (AppConfig::getDebug() == "true") {
-      ini_set('display_errors', 1);
-      ini_set('display_startup_errors', 1);
-      error_reporting(E_ALL); // Toutes les erreurs sauf le level "Notice"
-  }
-
-  /*
-   * -------------------------------------------------------------
-   * Le routage
-   *
-   * On va appeler les classes qui s'occupent du routage.
-   * Vous pouvez ajouter des routes dans le fichier de config
-   * routes.config.php.
-   * -------------------------------------------------------------
-   */
-  $router = new Router();
-  include("config/routes.config.php");
-  $render = $router->run();
-  echo $render;
 }
 catch(RouteException $e)
 {
