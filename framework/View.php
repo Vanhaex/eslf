@@ -49,8 +49,6 @@ class View
     public static function error404()
     {
         header("HTTP/1.1 404 Not Found");
-        $log = new LogWriting();
-        $log->write("testlog.log", "WARNING", "HTTP/1.1 404 Not Found");
         self::$smarty->display($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR . "404.tpl");
         exit(); // On arrête l'exécution du script au cas où
     }
