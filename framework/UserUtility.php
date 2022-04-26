@@ -2,18 +2,20 @@
 
 namespace Framework;
 
+use UAParser\Parser;
 
 /**
  * Classe avec quelques méthodes utiles pour le contrôle de données utilisateurs
  */
 class UserUtility
 {
+
   /**
    * Méthode pour cacher une partie de l'email
    * @param string $email_address
    * @return string $result
    */
-  public function HideEmail(string $email_address)
+  public static function HideEmail(string $email_address)
   {
     $em = $email_address;
     $stars = 4;
@@ -32,7 +34,7 @@ class UserUtility
    *
    * @return bool
    */
-  public function checkEmail(string $email_to_check)
+  public static function checkEmail(string $email_to_check)
   {
     if ($email_to_check == null || $email_to_check == "") {
       return false;
@@ -57,7 +59,7 @@ class UserUtility
    *
    * @return bool
    */
-  public function checkPhoneNumber(string $phone, int $isCell = 1)
+  public static function checkPhoneNumber(string $phone, int $isCell = 1)
   {
     // Si on vérifie le numero de portable
     if ($isCell == 1) {
@@ -91,7 +93,7 @@ class UserUtility
    *
    * @return bool
    */
-  public function checkTypeVariable(string $value)
+  public static function checkTypeVariable(string $value)
   {
     if (!isset($value)) {
       return false;
@@ -114,6 +116,51 @@ class UserUtility
     }
 
     return "N/A";
+  }
+
+  /**
+   * Retourne le nom du navigateur
+   *
+   * @param bool $version si true, alors on retourne aussi la version du navigateur
+   * @return mixed
+   */
+  public static function getBrowser(bool $version = false)
+  {
+    $ua = InputUtility::server("HTTP_USER_AGENT");
+
+    $parser = Parser::create();
+    $result = $parser->parse($ua);
+
+    $browser = $result->ua->family;
+
+    if ($version){
+      $browser = $result->ua->toString();
+    }
+
+    return $browser;
+  }
+
+  /**
+   * Retourne le nom du système d'exploitation
+   *
+   * @param bool $version si true, on retourne aussi la version du système d'exploitation
+   * @return string
+   * @throws \UAParser\Exception\FileNotFoundException
+   */
+  public static function getOS(bool $version = false)
+  {
+    $ua = InputUtility::server("HTTP_USER_AGENT");
+
+    $parser = Parser::create();
+    $result = $parser->parse($ua);
+
+    $os = $result->os->family;
+
+    if ($version){
+      $os = $result->os->toString();
+    }
+
+    return $os;
   }
 }
 

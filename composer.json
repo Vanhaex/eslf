@@ -18,7 +18,8 @@
       "smarty/smarty": "^4",
       "vanhaex/esdbaccess": "^1.0",
       "psr/http-server-middleware": "^1.0",
-      "symfony/console": "^5.4"
+      "symfony/console": "^5.4",
+        "ua-parser/uap-php": "^3.9"
     },
     "autoload": {
         "psr-4": {
