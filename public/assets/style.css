@@ -16,16 +16,8 @@ body {
     width: 100%;
 }
 #github_logo {
-    border-right: 1px solid lightgrey;
-    padding-right: 10px;
     height: 4rem;
     width: 4rem;
-}
-#github_profile {
-    padding-left: 6px;
-    height: 4rem;
-    width: 4rem;
-    border-radius: 50%;
 }
 
 .alert-message-danger {

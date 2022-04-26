@@ -13,7 +13,6 @@
 </div>
 <div class="credits">
   <a href="https://github.com/Vanhaex" ><img id="github_logo" src="/public/assets/images/github_logo.png" alt="github logo"></a>
-  <a href="https://github.com/Vanhaex" ><img id="github_profile" src="/public/assets/images/github_profile.jpeg" alt="github profile pic"></a>
 </div>
 
 {/block}
