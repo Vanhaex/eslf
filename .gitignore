@@ -1,6 +1,6 @@
 vendor
 stats
-log/*
+log
 views_c
 cache
 .idea
