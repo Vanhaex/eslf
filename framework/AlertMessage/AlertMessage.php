@@ -6,7 +6,7 @@ use Framework\SessionUtility;
 
 class AlertMessage
 {
-    private $session;
+    private SessionUtility $session;
 
     public function __construct()
     {

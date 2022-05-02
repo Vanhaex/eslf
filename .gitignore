@@ -4,5 +4,6 @@ log
 views_c
 cache
 .idea
+error
 
 composer.lock

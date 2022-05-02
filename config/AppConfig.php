@@ -19,7 +19,7 @@ class AppConfig
     /**
      * Indique si on doit générer des logs. Pour ne pas instancier l'objet LogWriting et éviter les erreurs
      */
-    const ACTIVATE_LOGS = true;
+    const ACTIVATE_LOGS = false;
 
     /**
      * Le nom du dossier contenant les logs (ne doit pas finir par un "/")
