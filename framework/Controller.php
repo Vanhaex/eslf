@@ -2,45 +2,34 @@
 
 namespace Framework;
 
-use Smarty;
+use Config\AppConfig;
+use Config\DatabaseConfig;
 use ESDBaccess\ESDBaccess;
-
-require('../config/app.config.php');
-require('../config/database.config.php');
 
 abstract class Controller
 {
 
   protected $smarty;
   protected $esdbaccess;
+  protected $log;
 
   public function __construct()
   {
     // on instancie les variables pour les réutiliser dans les controlleurs
-    $this->esdbaccess = $this->initDatabase();
-
-    if (is_null($this->smarty)) {
-        $this->smarty = new Smarty();
-        // Configuration de Smarty
-        $this->smarty->setTemplateDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'views' .  DIRECTORY_SEPARATOR);
-        $this->smarty->setCompileDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'views_c' . DIRECTORY_SEPARATOR);
-        $this->smarty->setCacheDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'cache' . DIRECTORY_SEPARATOR);
-        $this->smarty->setPluginsDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'smarty_plugins' . DIRECTORY_SEPARATOR);
-        if (CONFIG_DEBUG == "true") {
-          $this->smarty->cache_lifetime = 0;
-          $this->smarty->setCaching(Smarty::CACHING_OFF);
-        }
-        else {
-          $this->smarty->cache_lifetime = 0;
-          $this->smarty->setCaching(Smarty::CACHING_OFF);
-        }
-
+    // Si on a besoin de se connecter à une bdd, on instancie l'objet
+    if (AppConfig::getActivateDatabase() == true){
+      $this->esdbaccess = $this->initDatabase();
     }
 
-    return $this->smarty;
+    if (AppConfig::getActivateLogs() == true){
+      $this->log = new LogWriting();
+    }
+
+    // On initialise Smarty (cache, dossier des plugins, etc...)
+    $this->smarty = View::initView();
   }
 
-  protected function view($template, $assign_value = null)
+  public function view($template, $assign_value = null)
   {
     if (!is_null($assign_value)) {
       foreach ($assign_value as $key => $value) {
@@ -63,9 +52,9 @@ abstract class Controller
 
   public function initDatabase()
   {
-    $this->esdbaccess = new ESDBaccess(CONFIG_DATABASE_HOST, CONFIG_DATABASE_USER, CONFIG_DATABASE_PASSWORD, CONFIG_DATABASE_DATABASE, CONFIG_DATABASE_PORT);
+    $this->esdbaccess = new ESDBaccess(DatabaseConfig::getDatabaseHost(), DatabaseConfig::getDatabaseUser(), DatabaseConfig::getDatabasePassword(), DatabaseConfig::getDatabaseDbName(), DatabaseConfig::getDatabasePort());
     $this->esdbaccess->connectToDB();
-    $this->esdbaccess->ESDBautocommit(true);
+    $this->esdbaccess->ESDBautocommit(DatabaseConfig::getDatabaseTransactionMode());
 
     return $this->esdbaccess;
   }

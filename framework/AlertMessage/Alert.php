@@ -4,8 +4,8 @@ namespace Framework\AlertMessage;
 
 class Alert
 {
-    private $message;
-    private $status;
+    private string $message;
+    private string $status;
 
     public function __construct($message, $status = "success")
     {

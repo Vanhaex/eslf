@@ -1,6 +1,6 @@
 {
     "name": "eslf/vanhaex",
-    "version": "1.0.0",
+    "version": "0.0.0",
     "description": "Easy, Simple and Lightweight web Framework for creating web applications",
     "type": "project",
     "license": "MIT",
@@ -12,15 +12,19 @@
     ],
     "minimum-stability": "stable",
     "require": {
-      "php": "^7.1",
+      "php": "^7.4",
       "phpmailer/phpmailer": "^6.4",
       "ext-mysqli":"*",
       "smarty/smarty": "^4",
-      "vanhaex/esdbaccess": "^1.0"
+      "vanhaex/esdbaccess": "^1.0",
+      "psr/http-server-middleware": "^1.0",
+      "symfony/console": "^5.4",
+        "ua-parser/uap-php": "^3.9"
     },
     "autoload": {
         "psr-4": {
             "Framework\\": "framework/",
+            "Config\\": "config/",
             "App\\": "app/"
         }
     }

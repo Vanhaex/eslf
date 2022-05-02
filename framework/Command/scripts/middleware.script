@@ -1,0 +1,16 @@
+<?php
+
+namespace {{ ESbuilderNamespace }};
+
+class {{ ESbuilderName }}Middleware
+{
+    /**
+     * Lance ce qui va être executé par le Middleware
+     *
+     * @return void
+     */
+    public static function execute()
+    {
+        // Middleware généré grâce à ESBuilder !
+    }
+}

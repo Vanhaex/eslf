@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Erreur 500</title>
+    <link href="/public/assets/style.css" rel="stylesheet" type="text/css" >
   </head>
   <body style="text-align:center;" >
     <h3>Erreur 500 - Erreur interne</h3>

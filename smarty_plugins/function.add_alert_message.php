@@ -3,13 +3,13 @@
 /*
  * Smarty plugin
  * -------------------------------------------------------------
- * Fichier :  function.alert_message.php
+ * Fichier :  function.add_alert_message.php
  * Type :     fonction
- * Nom :      flash_message
+ * Nom :      add_alert_message
  * Rôle :     Affiche un message d'alerte (ou message flash) dans un template
  * -------------------------------------------------------------
  */
-function smarty_function_alert_message()
+function smarty_function_add_alert_message()
 {
     require_once("../framework/AlertMessage/AlertMessage.php");
 
@@ -21,9 +21,17 @@ function smarty_function_alert_message()
         $alerts = [];
     }
 
-    $string = "<div></div>";
+    $string = "<div>";
 
-    // TODO : écrire les tag html
+    foreach ($alerts as $alert){
+        $string .= "<div class='alert-message-{$alert->getStatus()}' >";
+            $string .= "<p>{$alert->getMessage()}</p>";
+        $string .= "</div>";
+    }
+
+    $string .= "</div>";
+
+    return $string;
 }
 
 

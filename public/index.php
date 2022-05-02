@@ -1,65 +1,96 @@
 <?php
 
+
+/*
+ * -------------------------------------------------------------
+ * Racine du projet
+ *
+ * On ajoute la racine du projet (exemple : /var/www/eslf) au
+ * répertoire d'inclusion PHP. Ce qui facilite l'inclusion des
+ * fichiers sans avoir à chercher où il se trouve.
+ * -------------------------------------------------------------
+ */
 $path = $_SERVER['DOCUMENT_ROOT'];
 $current_include_path = get_include_path();
 if (stristr($path, $current_include_path) == false) {
   set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 };
 
-// Header
-header("X-Frame-Options: SAMEORIGIN");
-header("X-Content-Type-Options: nosniff");
-header("X-XSS-Protection: 1;mode=block");
-header("Content-Type: text/html");
-header("Access-Control-Allow-Origin: *");
 
-ini_set("session.cookie_httponly", 1);
+// Autoloader, pour mieux gérer nos classes
+require_once("vendor/autoload.php");
 
-ini_set("session.use_only_cookies", 1);
-
-// Autoloader
-require_once("../vendor/autoload.php");
-
-// Smarty Class
-require_once("../vendor/smarty/smarty/libs/Smarty.class.php");
-
+// Les use, qui vont nous être essentiels :)
+use Framework\Middlewares\Middleware;
 use Framework\Router;
-use Framework\Controller;
+use Framework\RouteException;
+use Framework\SessionUtility;
+use Framework\View;
+use Config\AppConfig;
+use Config\RoutesConfig;
 
-$smarty = new Smarty();
+$smarty = View::initView();
+$session = SessionUtility::getInstance();
 
 try
 {
-  $router = new Router();
+    /*
+     * -------------------------------------------------------------
+     * Mode debug
+     *
+     * Le mode debug est très pratique, il permet d'afficher les
+     * messages d'erreurs PHP. Vous pouvez activer ou désactiver
+     * ce mode en modifiation la valeur de la variable CONFIG_DEBUG
+     * dans le fichier de config AppConfig.php. Assurez-vous de
+     * le désactiver avant la mise en production !
+     * -------------------------------------------------------------
+     */
+    if (AppConfig::getDebug() == "true") {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL); // Toutes les erreurs sauf le level "Notice"
+    }
 
-  include("../config/routes.config.php");
-  include("../config/app.config.php");
+    /*
+    * -------------------------------------------------------------
+    * Middlewares
+    *
+    * On va appeler tous les middlewares que l'on a défini qui vont
+    * traiter la requête qui a été soumise. Par exemple, les
+    * middlewares par défaut vont ajouter les en-têtes HTTP standard
+    * et la vérification du jeton CSRF.
+    * Il est possible d'ajouter plus de middlewares
+    * -------------------------------------------------------------
+    */
+    Middleware::process("SetHeaders");
+    Middleware::process("VerifyCSRF");
 
-  if (CONFIG_DEBUG == "true") {
-      ini_set('display_errors', 1);
-      ini_set('display_startup_errors', 1);
-      error_reporting(E_ALL & ~E_NOTICE); // Toutes les erreurs sauf le level "Notice"
-  }
+    /*
+    * -------------------------------------------------------------
+    * Le routage
+    *
+    * On va appeler les classes qui s'occupent du routage.
+    * Vous pouvez ajouter des routes dans le fichier de config
+    * RoutesConfig.php
+    * -------------------------------------------------------------
+    */
+    $router = new Router();
+    $router = RoutesConfig::getRoutes($router);
+    $render = $router->run();
+    echo $render;
 
-  $render = $router->run();
-  echo $render;
+
 }
-catch(\Framework\RouteException $e)
+catch(RouteException $e)
 {
-  header("HTTP/1.1 404 Not Found");
-  $smarty->setCompileDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'views_c' . DIRECTORY_SEPARATOR);
-  $smarty->display($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR . "404.tpl");
+  // En cas d'erreur 404, ce qui signifie que la page ou la ressource demandée n'a pas été trouvée !
+  View::error404();
 }
 catch(Exception $e)
 {
-  header("HTTP/1.1 505 Internal Server Error");
-  $smarty->setCompileDir($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .  'views_c' . DIRECTORY_SEPARATOR);
-
-  // Affichage du message si erreur 500
-  if (CONFIG_DEBUG == "true") {
-    $smarty->assign('detail_exception', 'Détails de l\'erreur : ' . $e->getFile() . ':' . $e->getLine() . '<br>' . $e->getMessage());
-  }
-  $smarty->display($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "errors" . DIRECTORY_SEPARATOR . "500.tpl");
+    // Ou en cas d'erreur 500, ce qui signifie qu'il y a un problème côté serveur (délai de réponse trop long, erreur dans l'execution d'un script, problème lié au serveur, etc...)
+    // ici, on précise le message d'erreur pour comprendre
+    View::error500($e->getFile() . ':' . $e->getLine() . '<br>' . $e->getMessage());
 }
 
 ?>
