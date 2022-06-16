@@ -7,7 +7,7 @@ class DatabaseConfig
     /**
      * Le host de connexion à la bdd
      */
-    const CONFIG_DATABASE_HOST = "localhost";
+    const CONFIG_DATABASE_HOST = "";
 
     /**
      * Le port de connexion à la bdd
@@ -17,22 +17,22 @@ class DatabaseConfig
     /**
      * Le username de connexion à la bdd
      */
-    const CONFIG_DATABASE_USER = "root";
+    const CONFIG_DATABASE_USER = "";
 
     /**
      * Le password de connexion à la bdd
      */
-    const CONFIG_DATABASE_PASSWORD = "root1234!";
+    const CONFIG_DATABASE_PASSWORD = "";
 
     /**
      * Le nom de la bdd
      */
-    const CONFIG_DATABASE_DATABASE = "eslftable";
+    const CONFIG_DATABASE_DATABASE = "";
 
     /**
      * Si true, le mode transactionnel est activé
      */
-    const CONFIG_DATABASE_TRANSACTIONS = "true";
+    const CONFIG_DATABASE_TRANSACTIONS = "";
 
     /**
      * Retourne le host
