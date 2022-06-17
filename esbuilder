@@ -14,6 +14,7 @@ $commandArrays = [
     "AboutCommand",
     "VersionCommand",
     "ControllerCommand",
+    "ModelCommand",
     "CacheCommand",
     "MiddlewareCommand"
 ];

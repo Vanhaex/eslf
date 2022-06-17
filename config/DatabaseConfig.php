@@ -32,7 +32,7 @@ class DatabaseConfig
     /**
      * Si true, le mode transactionnel est activé
      */
-    const CONFIG_DATABASE_TRANSACTIONS = "true";
+    const CONFIG_DATABASE_TRANSACTIONS = "";
 
     /**
      * Retourne le host

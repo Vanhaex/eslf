@@ -1,0 +1,22 @@
+<?php
+
+namespace {{ ESbuilderNamespace }};
+
+use Framework\Model\Model;
+
+class {{ ESbuilderName }} extends Model
+{
+    /**
+     * La table en base de données qui sera utilisée par le Model
+     *
+     * @var string
+     */
+    protected $table = "{{ ESbuilderModelTable }}";
+
+    /**
+     * Les colonnes de la table qui seront utilisée par le Model
+     *
+     * @var array
+     */
+    protected $columns = [];
+}

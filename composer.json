@@ -1,13 +1,12 @@
 {
     "name": "eslf/vanhaex",
-    "version": "0.0.0",
+    "version": "2.0.0",
     "description": "Easy, Simple and Lightweight web Framework for creating web applications",
     "type": "project",
     "license": "MIT",
     "authors": [
         {
-            "name": "vanhaex",
-            "email": "monlouis59@hotmail.fr"
+            "name": "vanhaex"
         }
     ],
     "minimum-stability": "stable",
