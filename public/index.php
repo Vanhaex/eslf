@@ -13,7 +13,7 @@
 $path = $_SERVER['DOCUMENT_ROOT'];
 $current_include_path = get_include_path();
 if (stristr($path, $current_include_path) == false) {
-  set_include_path(get_include_path() . PATH_SEPARATOR . $path);
+    set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 };
 
 
@@ -25,6 +25,7 @@ use Framework\Middlewares\Middleware;
 use Framework\Router;
 use Framework\RouteException;
 use Framework\SessionUtility;
+use Framework\InputUtility;
 use Framework\View;
 use Config\AppConfig;
 use Config\RoutesConfig;
@@ -71,20 +72,26 @@ try
     *
     * On va appeler les classes qui s'occupent du routage.
     * Vous pouvez ajouter des routes dans le fichier de config
-    * RoutesConfig.php
+    * RoutesConfig.php. On sépare en deux les classes utilisées
+    * en fonction de si c'est une API ou non
     * -------------------------------------------------------------
     */
     $router = new Router();
     $router = RoutesConfig::getRoutes($router);
-    $render = $router->run();
+
+    if (preg_match("/^(\\" . AppConfig::getApiBaseUri() . ")/im", InputUtility::server("REQUEST_URI"))){
+        $render = $router->runAPI();
+    }
+    else {
+        $render = $router->run();
+    }
+
     echo $render;
-
-
 }
 catch(RouteException $e)
 {
-  // En cas d'erreur 404, ce qui signifie que la page ou la ressource demandée n'a pas été trouvée !
-  View::error404();
+    // En cas d'erreur 404, ce qui signifie que la page ou la ressource demandée n'a pas été trouvée !
+    View::error404();
 }
 catch(Exception $e)
 {
