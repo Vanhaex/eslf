@@ -1,0 +1,23 @@
+<?php
+
+namespace App\api;
+
+use Framework\ApiUtility;
+
+/**
+ * <p><b>Nom :</b> {{ ESbuilderName }}Api</p>
+ * <p><b>Description :</b> {{ ESbuilderDesc }}</p>
+ * <p><b>URI :</b> {{ ESbuilderURI }}</p>
+ *
+ */
+class {{ ESbuilderName }}Api extends ApiUtility
+{
+    // API générée grâce à ESBuilder !
+
+    public function index()
+    {
+        return "Hello World from {{ ESbuilderName }}Api !";
+    }
+}
+
+?>

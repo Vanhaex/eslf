@@ -16,7 +16,8 @@ $commandArrays = [
     "ControllerCommand",
     "ModelCommand",
     "CacheCommand",
-    "MiddlewareCommand"
+    "MiddlewareCommand",
+    "ApiCommand"
 ];
 
 foreach ($commandArrays as $cmd){
