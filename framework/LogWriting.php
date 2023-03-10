@@ -11,12 +11,14 @@ class LogWriting
   private $level;
 
   // Tableau contenant les différents niveaux de log
-  const LOGLEVEL = [
-      'ALERT',
-      'ERROR',
-      'WARNING',
-      'INFO',
-      'DEBUG'];
+  const LOGLEVEL =
+      [
+          'ALERT',
+          'ERROR',
+          'WARNING',
+          'INFO',
+          'DEBUG'
+      ];
 
   public function __construct(){}
 
@@ -35,14 +37,14 @@ class LogWriting
 
 
       // Message de retour en cas de problème
-      if ($this->setLevel($level) == false){
+      if (!$this->setLevel($level)){
         echo "Erreur Log : Le niveau de log n'existe pas";
       }
-      elseif ($this->setMessage($message) == false){
+      elseif (!$this->setMessage($message)){
         echo "Erreur Log : Le message de log est manquant";
       }
-      elseif ($this->setFile($filename) == false){
-        echo "Erreur Log : Le niveau de log n'existe pas";
+      elseif (!$this->setFile($filename)){
+        echo "Erreur Log : Le fichier de log n'est pas accessible";
       }
       else {
         // On écrit donc le log grâce aux méthodes privées qui vont nettoyer et vérifier ce que l'on met en paramètre
@@ -77,6 +79,8 @@ class LogWriting
 
       return $this->filename = $filename;
     }
+
+    return false;
   }
 
   private function setLevel($level)

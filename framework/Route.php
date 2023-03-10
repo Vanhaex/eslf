@@ -18,9 +18,9 @@ class Route {
     }
 
     /**
-    * Permettra de capturer l'url avec les paramètre
-    * get('/posts/:slug-:id') par exemple
-    **/
+     * Permettra de capturer l'url avec les paramètre
+     * get('/posts/:slug-:id') par exemple
+     **/
     public function match($url)
     {
         $url = trim($url, '/');
@@ -28,7 +28,7 @@ class Route {
         $result = preg_match('#^' . $regexp_path . '$#', $url, $matches);
         array_splice($matches, 0, 1);
         if($result == 1){
-          return $matches;
+            return $matches;
         }
 
         return false;
@@ -36,33 +36,33 @@ class Route {
 
     public function call($param)
     {
-      ob_start();
+        ob_start();
 
-      $method = trim($this->method);
+        $method = trim($this->method);
 
-      if(substr($this->controller, 0,1) != '\\'){
-        $controller = 'App\\controller\\' . $this->controller;
-      }
+        if(substr($this->controller, 0,1) != '\\'){
+            $controller = 'App\\controller\\' . $this->controller;
+        }
 
-      if (class_exists($controller)) {
-        $controller = new $controller();
+        if (class_exists($controller)) {
+            $controller = new $controller();
 
-        if (method_exists($controller, $method)) {
-          call_user_func_array(array($controller, $method), $param);
+            if (method_exists($controller, $method)) {
+                call_user_func_array(array($controller, $method), $param);
+            }
+            else {
+                throw new RouteException;
+            }
         }
         else {
-          throw new RouteException;
+            throw new RouteException;
         }
-      }
-      else {
-        throw new RouteException;
-      }
 
-      $rendered_page = ob_get_contents();
+        $rendered_page = ob_get_contents();
 
-      ob_end_clean();
+        ob_end_clean();
 
-      return $rendered_page;
+        return $rendered_page;
     }
 
 }

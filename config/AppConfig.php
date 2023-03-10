@@ -33,6 +33,12 @@ class AppConfig
      */
     const ACTIVATE_DATABASE = false;
 
+    /**
+     * L'URI de base pour appeler une API. Peut être changé si besoin mais doit rester explicite et sans caractères exotiques
+     * Défaut : '/api'
+     */
+    const API_BASE_URI = "/api";
+
 
     /**
      * Retourne le type d'environnement du projet
@@ -82,6 +88,16 @@ class AppConfig
     public static function getActivateDatabase(): bool
     {
         return self::ACTIVATE_DATABASE;
+    }
+
+    /**
+     * Retourne l'URI de base pour appeler une API
+     *
+     * @return string
+     */
+    public static function getApiBaseUri(): string
+    {
+        return self::API_BASE_URI;
     }
 
 }
