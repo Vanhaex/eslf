@@ -12,6 +12,7 @@
     "minimum-stability": "stable",
     "require": {
       "php": "^7.4",
+      "ext-openssl": "*",
       "phpmailer/phpmailer": "^6.4",
       "ext-mysqli":"*",
       "ext-json": "*",

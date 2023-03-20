@@ -43,14 +43,14 @@ class VerifyCSRFMiddleware
      * @return bool
      * @throws \Exception
      */
-    private static function generateToken($input)
+    private static function generateToken($input): bool
     {
         // Il faut indiquer le nom du champ input et session (identiques)
         if (empty($input)){
             return false;
         }
 
-        $token = base64_encode(time() . sha1(InputUtility::server('REMOTE_ADDR')) . random_bytes(32));
+        $token = bin2hex(openssl_random_pseudo_bytes(32));
 
         SessionUtility::getInstance()->setSession($input, $token);
 
