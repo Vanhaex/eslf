@@ -16,3 +16,5 @@ jobs:
                 security_analysis: true
                 composer_require_dev: true
                 composer_ignore_platform_reqs: true
+                # Path to SARIF file relative to the root of the repository
+                sarif_file: results.sarif
