@@ -21,6 +21,9 @@
       "symfony/console": "^5.4",
       "ua-parser/uap-php": "^3.9"
     },
+    "require-dev": {
+        "vimeo/psalm": "^5.8"
+    },
     "autoload": {
         "psr-4": {
             "Framework\\": "framework/",
