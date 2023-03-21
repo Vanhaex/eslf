@@ -29,6 +29,10 @@ jobs:
             - name: Run a one-line script
               run: echo Hello, world!
 
+            # install extension mysqli
+            - name: install extension mysqli
+              run: apt install -y php7.4-mysqli
+
             - name: Psalm – Security Scanner for PHP
                 # You may pin to the exact commit or the version.
                 # uses: psalm/psalm-github-security-scan@f3e6fd9432bc3e44aec078572677ce9d2ef9c287
