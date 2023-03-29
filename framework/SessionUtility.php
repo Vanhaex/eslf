@@ -2,21 +2,24 @@
 
 namespace Framework;
 
+/**
+ * Class with static methods to handle session variables
+ */
 class SessionUtility
 {
-    // Le statut de la session, si elle est ouverte ou non
+    // State of session variable
     const SESSION_ON = true;
     const SESSION_OFF = false;
 
-    private static $instance;
+    private static SessionUtility $instance;
 
-    // La session est fermée par défaut
-    private $sessionStatus = self::SESSION_OFF;
+    // Session closed by default
+    private bool $sessionStatus = self::SESSION_OFF;
 
     private function __construct() {}
 
     /**
-     * Un singleton qui va nous permettre d'instancier qu'une seule fois
+     * Signleton for one-time declaration
      *
      * @return SessionUtility
      */
@@ -32,7 +35,7 @@ class SessionUtility
     }
 
     /**
-     * Créé une session après avoir vérifié son statut
+     * Verify session variable then create it
      *
      * @return bool
      */
@@ -41,14 +44,14 @@ class SessionUtility
         if ($this->sessionStatus == self::SESSION_OFF)
         {
             session_start();
-            $this->sessionStatus = self::SESSION_ON; // On précise bien le statut de la session
+            $this->sessionStatus = self::SESSION_ON; // We precise state of session variable
         }
 
         return $this->sessionStatus;
     }
 
     /**
-     * Détruit une session après avoir vérifié son statut
+     * Verify session variable then destroy it
      *
      * @return bool
      */
@@ -57,14 +60,14 @@ class SessionUtility
         if ($this->sessionStatus == self::SESSION_ON)
         {
             session_destroy();
-            $this->sessionStatus = self::SESSION_OFF; // On précise bien le statut de la session
+            $this->sessionStatus = self::SESSION_OFF; // We precise state of session variable
         }
 
         return $this->sessionStatus;
     }
 
     /**
-     * Vérifie l'état de la session
+     * Verify state of variable
      *
      * @return bool
      */
@@ -80,7 +83,7 @@ class SessionUtility
     }
 
     /**
-     * Déclare une variable de session et lui assigne une valeur
+     * Declare session variable and assign it some value
      *
      * @param $key
      * @param $value
@@ -88,20 +91,20 @@ class SessionUtility
      */
     public function setSession($key, $value)
     {
-        $value = InputUtility::session($value);
+        $value = InputUtility::request("session", $value);
 
         $_SESSION[$key] = $value;
     }
 
     /**
-     * Retourne la valeur d'une variable de session
+     * Return value of session variable
      *
      * @param $key
      * @return false|mixed
      */
     public function getSession($key)
     {
-        $key = InputUtility::session($key);
+        $key = InputUtility::request("session", $key);
 
         if (isset($_SESSION[$key])){
             return $_SESSION[$key];
@@ -111,37 +114,37 @@ class SessionUtility
     }
 
     /**
-     * Retourne toutes les variables de session existantes
+     * Return all session variables
      *
-     * @return array
+     * @return mixed
      */
-    public function getAllSession(): array
+    public function getAllSession()
     {
         return $_SESSION;
     }
 
     /**
-     * Vérifie si une variable de session en particulier existe
+     * Verify if specifi session variable exists
      *
      * @param $key
      * @return bool
      */
     public function hasSession($key): bool
     {
-        $key = InputUtility::session($key);
+        $key = InputUtility::request("session", $key);
 
         return isset($_SESSION[$key]);
     }
 
     /**
-     * Détruit une variable de session
+     * Destroy session variable
      *
      * @param $key
      * @return bool
      */
     public function unsetSession($key): bool
     {
-        $key = InputUtility::session($key);
+        $key = InputUtility::request("session", $key);
 
         if (isset($_SESSION[$key])){
             unset($_SESSION[$key]);
@@ -151,7 +154,7 @@ class SessionUtility
     }
 
     /**
-     * Détruit toutes les variables de session
+     * Destroy all session variables
      *
      * @return void
      */

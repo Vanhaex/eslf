@@ -5,13 +5,18 @@ namespace Framework\Middlewares;
 use Framework\InputUtility;
 use Framework\SessionUtility;
 use Framework\View;
+use Smarty;
 
 /**
  * Va générer et vérifier les jetons pour contrer la faille CSRF
  */
 class VerifyCSRFMiddleware
 {
-    private static $smarty;
+    private static Smarty $smarty;
+
+    private static string $csrf_token_name = "csrf_token";
+
+    private static int $csrf_token_lifetime = 3*60*60;
 
     /**
      * Lance ce qui va être executé par le Middleware
@@ -28,7 +33,7 @@ class VerifyCSRFMiddleware
         catch (\Exception $e){}
 
         // On génère un jeton CSRF
-        $token = self::generateToken('csrf_token');
+        $token = self::generateToken(self::$csrf_token_name);
 
         // on l'assigne à un input dans le template
         self::$smarty = View::initView();
@@ -36,13 +41,7 @@ class VerifyCSRFMiddleware
         self::$smarty->assign('csrf_token', $token);
     }
 
-    /**
-     *  Génère une jeton CSRF
-     *
-     * @param $input
-     * @return bool
-     * @throws \Exception
-     */
+
     private static function generateToken($input)
     {
         // Il faut indiquer le nom du champ input et session (identiques)
@@ -50,7 +49,7 @@ class VerifyCSRFMiddleware
             return false;
         }
 
-        $token = base64_encode(time() . sha1(InputUtility::server('REMOTE_ADDR')) . random_bytes(32));
+        $token = base64_encode(time() . sha1(InputUtility::ip()) . random_bytes(32));
 
         SessionUtility::getInstance()->setSession($input, $token);
 
@@ -66,8 +65,8 @@ class VerifyCSRFMiddleware
     private static function verifyToken($method)
     {
         if ($method === "POST"){
-            if (InputUtility::getData('csrf_token')){
-                self::checkToken('csrf_token', InputUtility::post('csrf_token'), 3*60*60);
+            if (InputUtility::request('post', 'csrf_token')){
+                self::checkToken('csrf_token', InputUtility::request('post', 'csrf_token'), self::$csrf_token_lifetime);
             }
             else{
                 View::error500("Le jeton CSRF est inexistant");
@@ -83,7 +82,7 @@ class VerifyCSRFMiddleware
      * @param float|int $timeout la durée max du token (3h par défaut)
      * @throws \Exception
      */
-    private static function checkToken($session_token, $token, $timeout = null)
+    private static function checkToken(string $session_token, string $token, $timeout = null)
     {
         if (!$token){
             View::error500("Le jeton CSRF est invalide");

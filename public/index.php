@@ -21,11 +21,11 @@ if (stristr($path, $current_include_path) == false) {
 require_once("vendor/autoload.php");
 
 // Les use, qui vont nous être essentiels :)
+use Framework\InputUtility;
 use Framework\Middlewares\Middleware;
 use Framework\Router;
 use Framework\RouteException;
 use Framework\SessionUtility;
-use Framework\InputUtility;
 use Framework\View;
 use Config\AppConfig;
 use Config\RoutesConfig;
@@ -79,7 +79,7 @@ try
     $router = new Router();
     $router = RoutesConfig::getRoutes($router);
 
-    if (preg_match("/^(\\" . AppConfig::getApiBaseUri() . ")/im", InputUtility::server("REQUEST_URI"))){
+    if (preg_match("/^(\\" . AppConfig::getApiBaseUri() . ")/im", InputUtility::request("server", "REQUEST_URI"))){
         $render = $router->runAPI();
     }
     else {

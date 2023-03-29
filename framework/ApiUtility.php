@@ -2,19 +2,17 @@
 
 namespace Framework;
 
-use Config\AppConfig;
-
 abstract class ApiUtility
 {
     /**
      * Permets de retourner mes paramètres données dans l'api
      *
-     * @param string $key le pointeur vers le paramètre à analyser (Exemple 0 => première occurence)
+     * @param int $key le pointeur vers le paramètre à analyser (Exemple 0 => première occurrence)
      * @return false|mixed|string|string[]
      */
-    protected function getParam(string $key = "")
+    protected function getParam(int $key = 0)
     {
-        $url = InputUtility::server("REQUEST_URI");
+        $url = InputUtility::request("server", "REQUEST_URI");
 
         $array_params = explode("/", $url);
 
@@ -24,7 +22,7 @@ abstract class ApiUtility
 
         $array_params = array_values($array_params);
 
-        if ($key !== ""){
+        if ($key !== 0){
             return $array_params[$key];
         }
 
