@@ -4,7 +4,6 @@ namespace Framework;
 
 class Router
 {
-
     private $path; // Contiendra l'URL sur laquelle on souhaite se rendre
     private $routes = ['GET' => [], 'POST' => []];
 
@@ -68,6 +67,5 @@ class Router
     }
 
 }
-
 
 ?>

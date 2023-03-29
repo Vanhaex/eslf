@@ -7,18 +7,18 @@ use Framework\Router;
 class RoutesConfig
 {
     /**
-     * Retoure toutes les routes disponibles
+     * Return all available routes
      *
      * @param Router $router
      * @return Router
      */
-    public static function getRoutes(Router $router)
+    public static function getRoutes(Router $router): Router
     {
         $router->get('/', 'HomeController', 'index');
         //
-        // Exemple : $router->get('/bonjour', "MonControlleur", "MaMéthode");
+        // Example : $router->get('/hello', "MyController", "MyMethod");
         //
-        // Si c'est une méthode POST, PUT ou DELETE, ajoutez '$router->post(...)'
+        // If that's POST, PUT or DELETE, add '$router->post(...)'
         //
 
         return $router;

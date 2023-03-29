@@ -125,6 +125,9 @@ abstract class Model
         if (!isset($this->esdbaccess)){
             $this->esdbaccess = new ESDBaccess(DatabaseConfig::getDatabaseHost(), DatabaseConfig::getDatabaseUser(), DatabaseConfig::getDatabasePassword(), DatabaseConfig::getDatabaseDbName(), DatabaseConfig::getDatabasePort());
             $this->esdbaccess->connectToDB();
+            /**
+             * @psalm-suppress InvalidArgument
+             */
             $this->esdbaccess->ESDBautocommit(DatabaseConfig::getDatabaseTransactionMode());
         }
 

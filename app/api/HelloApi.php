@@ -12,7 +12,7 @@ use Framework\ApiUtility;
  */
 class HelloApi extends ApiUtility
 {
-    public function index()
+    public function index(): string
     {
         return "Hello World from HelloApi !";
     }

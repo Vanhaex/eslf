@@ -53,7 +53,7 @@ class AppConfig
     /**
      * Retourne la valeur du mode debug
      *
-     * @return string
+     * @return bool
      */
     public static function getDebug(): bool
     {
@@ -73,9 +73,9 @@ class AppConfig
     /**
      * Retourne
      *
-     * @return string
+     * @return bool
      */
-    public static function getActivateLogs(): string
+    public static function getActivateLogs(): bool
     {
         return self::ACTIVATE_LOGS;
     }

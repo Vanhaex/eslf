@@ -64,6 +64,8 @@ class ApiCommand extends Command
 
     private function createAPI($name, $description, $uri)
     {
+        $folder = "";
+
         $path_to_api = $_SERVER['DOCUMENT_ROOT'] . "app" . DIRECTORY_SEPARATOR . "api";
 
         $namespace = "App\api";

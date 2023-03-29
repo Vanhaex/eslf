@@ -7,3 +7,5 @@ cache
 error
 
 composer.lock
+
+.phpunit.result.cache

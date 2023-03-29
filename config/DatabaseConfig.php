@@ -7,12 +7,12 @@ class DatabaseConfig
     /**
      * Le host de connexion à la bdd
      */
-    const CONFIG_DATABASE_HOST = "";
+    const CONFIG_DATABASE_HOST = "localhost";
 
     /**
      * Le port de connexion à la bdd
      */
-    const CONFIG_DATABASE_PORT = "";
+    const CONFIG_DATABASE_PORT = 3306;
 
     /**
      * Le username de connexion à la bdd
@@ -32,7 +32,7 @@ class DatabaseConfig
     /**
      * Si true, le mode transactionnel est activé
      */
-    const CONFIG_DATABASE_TRANSACTIONS = "";
+    const CONFIG_DATABASE_TRANSACTIONS = true;
 
     /**
      * Retourne le host
@@ -87,9 +87,9 @@ class DatabaseConfig
     /**
      * Retourne la valeur du mode transaction
      *
-     * @return string
+     * @return bool
      */
-    public static function getDatabaseTransactionMode(): string
+    public static function getDatabaseTransactionMode(): bool
     {
         return self::CONFIG_DATABASE_TRANSACTIONS;
     }

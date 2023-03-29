@@ -11,7 +11,7 @@ class RouteException extends \Exception
         if (AppConfig::getDebug()){
             parent::__construct($message, $code, $exception);
 
-            echo "Erreur Route ".$code." : " . $message . " " . $exception;
+            echo "Error Route ".$code." : " . $message . " " . $exception;
         }
     }
 }
