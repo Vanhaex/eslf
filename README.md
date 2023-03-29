@@ -1,34 +1,38 @@
 # ESLF
 
-### ESLF est un simple framework pour écrire des applications web
+[![Psalm Static analysis](https://github.com/Vanhaex/eslf/actions/workflows/main.yml/badge.svg?branch=dev)](https://github.com/Vanhaex/eslf/actions/workflows/main.yml)
 
-## Qu'est ce que ESLF ?
+### ESLF is a simple framework for writing web applications
 
-**ESLF** est le diminutif de **E**asy, **S**imple and **L**ightweight **F**ramework
-C'est un framework permettant de créer des applications web en PHP qui se veut facile à utiliser et léger. C'est un framework qui peut évoluer avec le temps et s'adapte à toutes les utilisations.
-Son architecture repose sur le principe du MVC pour Modèle, Vue, Controlleur. Il sépare donc le traitement de l'affichage en utilisant le moteur de templating **Smarty**.
-Certaines classes ont été créées afin de sécuriser le traitement des données utilisateur par les méthodes POST ou GET par exemple. Elles permettent aussi de contrôler plus facilement les données passées par les utilisateurs.
+## What is ESLF ?
 
-## Pourquoi un framework fait à la main ? Pourquoi ne pas utiliser un framework plus connu ?
+**ESLF** is short for **E**asy, **S**imple and **L**ightweight **F**ramework
+It is a framework for creating web applications in PHP that is easy to use and lightweight. It is a framework that can evolve over time and adapts to all uses.
+Its architecture is based on the principle of MVC for Model, View, Controller. It therefore separates the processing from the display by using the **Smarty** templating engine.
+Some classes have been created to secure the processing of user data by POST or GET methods, for example. They also make it easier to control the data entered by users.
 
-Mon objectif dès le départ était de créer un framework par moi-même en m'inspirant de mon expérience dans le domaine du développement web. Je voulais surtout quelque chose de léger avec le strict minimum. Cela me permet de créer des applications web beaucoup plus facilement et d'ajouter des fonctionnalités si nécessaire.
-Je m'inspire du framework **Laravel** pour certaines parties. Le second objectif est de permettre au développeur d'être à l'aide avec ce framework, de par des outils en ligne de commande ou des librairies.
-Par exemple, ESLF est fourni sans framework CSS tel que Bootstrap par exemple. On peut donc utiliser celui que l'on souhaite.
+## Why a handmade framework? Why not use a better known framework?
+
+My goal from the start was to create a framework by myself, inspired by my experience in the field of web development. Above all, I wanted something light with the bare minimum. It makes it much easier for me to build web apps and add functionality where needed.
+I am inspired by the **Laravel** framework for certain parts. The second objective is to allow the developer to be able to use this framework, through command line tools or libraries.
+For example, ESLF comes without a CSS framework such as Bootstrap for example. So you can use whatever you want.
 
 ## ESbuilder
 
-ESbuilder est une interface en ligne de commande inclue dans le framework. Elle fournit des commandes qui peuvent vous aider à construire votre projet. Elle permet par exemple de créer des controlleurs, des modèles, générer des clefs, vider le cache, etc...
-Pour lancer une commande pour obtenir la version du framework, il suffit de taper
+ESbuilder is a command line interface included in the framework. It provides commands that can help you build your project. It allows for example to create controllers, models, generate keys, empty the cache, etc...
+To run a command to get the framework version, just type :
 
 `php esbuilder version`
 
-Ce qui vous permettra d'obtenir en sortie :
+Which will allow you to get the framework version as output
 
-``ESLF v1.0.0``
+## Used dependencies
 
-## Dépendences utilisées
-
-ESLF nécessite PHP 7.1 au minimum ainsi que les autres dépendances ci-dessous :
+ESLF requires PHP 7.4 at least as well as the other dependencies below:
 
 * PHPMailer 6.4
-* Smarty 3.1
+* Smarty 4.3.0
+* ESDBaccess 1.0.2
+* psr/http-server-middleware 1.0.1
+* symfony/console 5.4.21
+* ua-parser/uap-php 3.9
