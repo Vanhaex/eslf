@@ -6,12 +6,10 @@ use Framework\Controller;
 
 class HomeController extends Controller
 {
-  public function index()
-  {
-    $this->view('home.tpl');
-  }
+    public function index()
+    {
+        $this->view('home.tpl');
+    }
 }
-
-
 
 ?>

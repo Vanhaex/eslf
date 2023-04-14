@@ -78,7 +78,7 @@ try
     $router = new Router();
     $router = RoutesConfig::getRoutes($router);
 
-    if (preg_match("/^(\\" . AppConfig::getApiBaseUri() . ")/im", InputUtility::server("REQUEST_URI"))){
+    if (preg_match("/^(\\" . AppConfig::getApiBaseUri() . ")/im", InputUtility::request("server", "REQUEST_URI"))){
         $render = $router->runAPI();
     }
     else {

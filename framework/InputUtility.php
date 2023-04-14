@@ -2,80 +2,71 @@
 
 namespace Framework;
 
-/**
- * Classe qui permet de récupérer des données par HTTP (GET ou POST) puis effectuer divers traitements
- **/
 class InputUtility
 {
-
     /**
-     * Indique si les méthodes PUT et DELETE doivent être réécrites en POST
-     * Peut être nécessaire pour les API REST qui ne supportent pas ces methodes
-     *
-     **/
-    const OVERRIDE = 'HTTP_X_HTTP_METHOD_OVERRIDE';
-
-    /**
-     * Variable contenant toutes les données passées à la soumission d'une requête
-     *
-     * @var array
+     * Known superglobals to handle request
      */
-    protected static $dataArray = array();
+    const SUPERGLOBALS =
+        [
+            "GET",
+            "POST",
+            "SERVER",
+            "SESSION",
+            "COOKIE",
+            "ENV",
+            "FILES",
+            "REQUEST"
+        ];
 
     /**
-     * Variable contenant le corps de la requête en brut
-     *
-     * @var string
+     * Array of keys to reject and avoid SQL injection
      */
-    protected static $body = 'php://input';
+    const INJECTION_PROTECTION_KEY =
+        [
+            "insert", "select", "from", "where", "drop",
+            ";", "update", "close", "connect", "<script>",
+            "database", "delete", "alter", "grant", "flush", "into"
+        ];
+
+    const ACCEPTED_METHODS =
+        [
+            "GET",
+            "POST"
+        ];
+
+    const FLAGS_FILES =
+        [
+            "FLAG_NONE" => "",
+            "FLAG_NAME" => "name",
+            "FLAG_TYPE" => "type",
+            "FLAG_TMP_NAME" => "tmp_name",
+            "FLAG_ERROR" => "error",
+            "FLAG_SIZE" => "size",
+        ];
 
     /**
-     * Un array content les termes qui doivent être exclus pour éviter l'injection SQL
+     * Prevent from SQL injections and XSS
      *
-     * @var array
-     **/
-    const INJECTION_PROTECTION_KEY = [
-        "insert", "select", "from",
-        "where", "drop", "into",
-        "open", "parameter", ";",
-        "update", "close", "connect",
-        "<script>", "database", "delete",
-        "substring" ];
-
-    /**
-     * Prévient des injections SQL et noSQL
-     *
-     * @param string $value          La valeur du tableau associatif ($_GET, $_POST, etc...)
-     * @param string $defaultValue   Une valeur par défaut
-     * @return mixed
-     **/
-    protected static function preventInjection($value, $defaultValue)
-    {
-        if (isset($value)) {
-            $value = str_replace(InputUtility::INJECTION_PROTECTION_KEY, '', $value);
-            return htmlspecialchars($value, ENT_QUOTES);
-        }
-        else {
-            return $defaultValue;
-        }
-    }
-
-    /**
-     * Prévient des injections sql et noSQL pour les valeurs d'un tableau
-     *
-     * @param $array
-     * @param $values
+     * @param array $array
+     * @param string $values
      * @param $defaultValue
-     * @return mixed
+     * @return array|string
      */
-    protected static function preventInjectionArray($array, $values, $defaultValue)
+    private static function preventInjectionArray(array $array, string $values, $defaultValue, $sql_injection = true)
     {
         if ($values === null){
             return $array;
         }
 
         if (isset($array[$values])){
-            $value = str_replace(InputUtility::INJECTION_PROTECTION_KEY, '', $array[$values]);
+
+            $value = $array[$values];
+
+            if ($sql_injection){
+                $value = str_replace(InputUtility::INJECTION_PROTECTION_KEY, '', $array[$values]);
+            }
+
             return htmlspecialchars($value, ENT_QUOTES);
         }
         else {
@@ -84,176 +75,81 @@ class InputUtility
     }
 
     /**
-     * Vérifie des données ont été passées dans la requête
+     * Prevent from SQL injections and XSS for FILES method
      *
-     * @param mixed $keys
-     * @return bool
+     * @param array $array
+     * @param string $values
+     * @param string $type
+     * @param string $defaultValue
+     * @return array|string
      */
-    public static function getData($keys): bool
+    private static function preventInjectionArrayFiles(array $array, string $values, string $type, string $defaultValue)
     {
-        foreach ((array) $keys as $key) {
-            if (trim(self::returnInputData($key)) == '') {
-                return false;
-            }
+        if ($values === null){
+            return $array;
         }
-        return true;
-    }
 
-    /**
-     * Vérifie si l'une des données du tableau a été soumise via la méthode GET ou POST
-     *
-     */
-    public static function submitted(): array
-    {
-        if (!empty(static::$dataArray)) {
-            return static::$dataArray;
-        }
-        parse_str(static::$body, $input);
-        return static::$dataArray = $_GET + $_POST + $input;
-    }
-
-    /**
-     * Retourne les valeurs qui ont été passées dans une requête
-     *
-     * @param null $key
-     * @param null $defaultValue
-     * @return mixed
-     */
-    public static function returnInputData($key = null, $defaultValue = null)
-    {
-        return self::preventInjectionArray(self::submitted(), $key, $defaultValue);
-    }
-
-    /**
-     * Récupère la valeur du tableau $_GET
-     *
-     * @param string $key       La valeur clée du tableau
-     * @param string $default   La valeur par défaut
-     **/
-    public static function get($key = null, $default = null): string
-    {
-        return static::preventInjection($_GET[$key], $default);
-    }
-
-    /**
-     * Récupère la valeur du tableau $_POST
-     *
-     * @param string $key       La valeur clée du tableau
-     * @param string $default   La valeur par défaut
-     **/
-    public static function post($key = null, $default = null): string
-    {
-        return static::preventInjection($_POST[$key], $default);
-    }
-
-    /**
-     * Récupère la valeur du tableau $_FILES
-     *
-     * @param string $key       La valeur clée du tableau
-     * @param string $type      Le type de donnée associé au fichier (nom, taille, etc...)
-     * @param string $default   La valeur par défaut
-     **/
-    public static function file($key = null, $type = null, $default = null): string
-    {
-        return static::preventInjection($_FILES[$key][$type], $default);
-    }
-
-    /**
-     * Récupère la valeur d'une variable de session après l'avoir nettoyée
-     *
-     * @param null $sessionValue
-     * @param string $default La valeur par défaut
-     */
-    public static function session($sessionValue = null, $default = null)
-    {
-        if (isset($sessionValue)) {
-            $sessionValue = str_replace(InputUtility::INJECTION_PROTECTION_KEY, '', $sessionValue);
-            return $sessionValue;
+        if (isset($array[$values])){
+            $type = str_replace(InputUtility::INJECTION_PROTECTION_KEY, '', $type);
+            return $array[$values][$type];
         }
         else {
-            return $default;
+            return $defaultValue;
         }
     }
 
-    /**
-     * Récupère la valeur du tableau $_COOKIE
-     *
-     * @param string $key       La valeur clée du tableau
-     * @param string $default   La valeur par défaut
-     **/
-    public static function cookie($key = null, $default = null): string
+    public static function request(string $superglobal, $value, $default = null, $sql_injection = true, $files_opt = "")
     {
-        return static::preventInjection($_COOKIE[$key], $default);
-    }
+        $superglobal = trim($superglobal);
 
-    /**
-     * Récupère la valeur du tableau $_ENV
-     *
-     * @param string $key       La valeur clée du tableau
-     * @param string $default   La valeur par défaut
-     **/
-    public static function env($key = null, $default = null): string
-    {
-        return static::preventInjection($_ENV[$key], $default);
-    }
-
-    /**
-     * Récupère la valeur du tableau $_SERVER
-     *
-     * @param string $key       La valeur clée du tableau
-     * @param string $default   La valeur par défaut
-     **/
-    public static function server($key = null, $default = null): string
-    {
-        return static::preventInjection($_SERVER[$key], $default);
-    }
-
-    /**
-     * Indique la méthode utilisée dans al requête (GET, POST, PUT, etc...)
-     * On vérifie si les requêtes PUT et DELETE son réécrites en POST
-     *
-     **/
-    public static function request_method(): string
-    {
-        $req_method = $_SERVER['REQUEST_METHOD'];
-
-        return strtoupper($req_method);
-    }
-
-    /**
-     * Retourne le protocole HTTP de la requête
-     **/
-    public static function serverProtocol(): string
-    {
-        if (static::server('SERVER_PROTOCOL') !== null) {
-            $server = static::server('SERVER_PROTOCOL');
-            return $server;
+        if (!in_array(strtoupper($superglobal), self::SUPERGLOBALS)){
+            return false;
         }
-        else {
-            $server = "HTTP/1.1";
-            return $server;
+
+        // If we use FILES method, we call the specific function to get files data
+        if (strtoupper($superglobal) === "FILES"){
+            return self::fileRequest($value, $default, $files_opt);
         }
+
+        // Overriden methods will be converted in POST method automatically
+        if (strtoupper($superglobal) == "PUT" || strtoupper($superglobal) == "DELETE" || isset($_POST["HTTP_X_HTTP_METHOD_OVERRIDE"]) || isset($_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"])){
+            $superglobal = "POST";
+        }
+
+        $request = self::prepareMethod($superglobal);
+
+        return self::preventInjectionArray($request, $value, $default, $sql_injection);
     }
 
-    /**
-     * Retourne "TRUE" si la requête a été éxecutée en HTTPS
-     **/
-    public static function isHttps()
+    private static function fileRequest($value, $options, $default = null)
     {
-        if (strtoupper(static::server('HTTPS')) == "ON") {
-            return true;
-        }
+        $request = self::prepareMethod("_FILES");
+
+        $type = self::FLAGS_FILES[$options];
+
+        return self::preventInjectionArrayFiles($request, $value, $type, $default);
+    }
+
+    public static function prepareMethod(string $superglobal): array
+    {
+        $superglobal = preg_replace("/[\d\s]+/m", "", $superglobal);
+
+        $superglobal = '_' . strtoupper($superglobal);
+
+        global ${$superglobal}; // We should consider that string "_GET", "_POST" or other is a global variable
+
+        return ${$superglobal};
     }
 
     /**
-     * Retourne l'adresse IP de la machine client.
-     * Si elle ne peut être obtenue, l'adresse sera 0.0.0.0
+     * Return client IP address.
+     * If we can't get it, default IP will be 0.0.0.0
      **/
     public static function ip()
     {
-        if (static::server('HTTP_CLIENT_IP') !== null) {
-            $ips[] = static::server('HTTP_CLIENT_IP');
-            // on va filter l'IP de la machine client afin de vérifier si c'est bien une adresse IP
+        if (self::request('server','HTTP_CLIENT_IP') !== null) {
+            $ips[] = self::request('server','HTTP_CLIENT_IP');
+            // Filtering client IP
             foreach ($ips as $ip) {
                 if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 || FILTER_FLAG_IPV6 || FILTER_FLAG_NO_PRIV_RANGE || FILTER_FLAG_NO_RES_RANGE)) {
                     return $ip;
@@ -261,31 +157,15 @@ class InputUtility
             }
         }
 
-        return static::server('REMOTE_ADDR', '0.0.0.0');
+        return self::request('server','REMOTE_ADDR', '0.0.0.0');
     }
 
     /**
-     * Retourne le port utilisé pour les communications.
-     * Si il ne peut être obtenu, le port sera 80
-     **/
-    public static function port(): string
-    {
-        if (static::server('SERVER_PORT') !== null) {
-            return static::server('SERVER_PORT');
-        }
-        else {
-            $default = "80";
-            return $default;
-        }
-    }
-
-    /**
-     * Méthode qui vérifie si l'URI est propre
-     *
+     * Method for cleaning URI
      **/
     public static function clean_uri()
     {
-        $path = trim(static::server('REQUEST_URI'));
+        $path = trim(strtok(self::request("server", "REQUEST_URI"),'?'));
 
         if(substr($path, -1) == '/' && strlen($path) > 1) {
             $path = substr($path, 0, -1);
@@ -298,7 +178,28 @@ class InputUtility
         return $path;
     }
 
+    /**
+     * Return query method used (GET, POST, ...)
+     * Verify overriden methods
+     *
+     **/
+    public static function request_method()
+    {
+        if (self::http_x_http_method_override()){
+            return self::request("post", "HTTP_X_HTTP_METHOD_OVERRIDE") || self::request("server", "HTTP_X_HTTP_METHOD_OVERRIDE");
+        }
+
+        $req_method = self::request("server", "REQUEST_METHOD");
+
+        return strtoupper($req_method);
+    }
+
+    /**
+     * Verify if it's overriden method
+     * @return bool
+     */
+    private static function http_x_http_method_override(): bool
+    {
+        return isset($_POST["HTTP_X_HTTP_METHOD_OVERRIDE"]) || isset($_SERVER["HTTP_X_HTTP_METHOD_OVERRIDE"]);
+    }
 }
-
-
-?>

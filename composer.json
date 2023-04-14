@@ -1,6 +1,6 @@
 {
     "name": "eslf/vanhaex",
-    "version": "2.0.0",
+    "version": "2.1.1",
     "description": "Easy, Simple and Lightweight web Framework for creating web applications",
     "type": "project",
     "license": "MIT",
@@ -22,11 +22,18 @@
       "symfony/console": "^5.4",
       "ua-parser/uap-php": "^3.9"
     },
+    "require-dev": {
+        "vimeo/psalm": "^5.8",
+        "phpunit/phpunit": "^9.6"
+    },
     "autoload": {
         "psr-4": {
             "Framework\\": "framework/",
             "Config\\": "config/",
             "App\\": "app/"
         }
+    },
+    "scripts": {
+        "psalm": "./vendor/bin/psalm"
     }
 }
