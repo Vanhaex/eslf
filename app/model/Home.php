@@ -21,3 +21,5 @@ class Home extends Model
     protected $columns =
         [];
 }
+
+?>
