@@ -6,7 +6,7 @@ use Framework\Controller;
 
 class {{ ESbuilderName }}Controller extends Controller
 {
-    // Controller généré grâce à ESBuilder !
+    // Controller generated with ESBuilder !
 }
 
 ?>

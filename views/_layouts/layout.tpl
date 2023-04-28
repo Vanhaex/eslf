@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="ltr">
+<html dir="ltr" lang="en">
     <head>
         <meta charset="utf-8" />
         <link rel="icon" type="image/ico" href="/public/favicon.ico">

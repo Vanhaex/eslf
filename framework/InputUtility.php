@@ -5,7 +5,7 @@ namespace Framework;
 class InputUtility
 {
     /**
-     * Known superglobal to handle request
+     * Known superglobals to handle request
      */
     const SUPERGLOBALS =
         [
@@ -24,12 +24,9 @@ class InputUtility
      */
     const INJECTION_PROTECTION_KEY =
         [
-            "insert", "select", "from",
-            "where", "drop", "into",
-            "open", "parameter", ";",
-            "update", "close", "connect",
-            "<script>", "database", "delete",
-            "alter", "grant", "flush"
+            "insert", "select", "from", "where", "drop",
+            ";", "update", "close", "connect", "<script>",
+            "database", "delete", "alter", "grant", "flush", "into"
         ];
 
     const ACCEPTED_METHODS =
@@ -56,14 +53,20 @@ class InputUtility
      * @param $defaultValue
      * @return array|string
      */
-    private static function preventInjectionArray(array $array, string $values, $defaultValue)
+    private static function preventInjectionArray(array $array, string $values, $defaultValue, $sql_injection = true)
     {
         if ($values === null){
             return $array;
         }
 
         if (isset($array[$values])){
-            $value = str_replace(InputUtility::INJECTION_PROTECTION_KEY, '', $array[$values]);
+
+            $value = $array[$values];
+
+            if ($sql_injection){
+                $value = str_replace(InputUtility::INJECTION_PROTECTION_KEY, '', $array[$values]);
+            }
+
             return htmlspecialchars($value, ENT_QUOTES);
         }
         else {
@@ -95,7 +98,7 @@ class InputUtility
         }
     }
 
-    public static function request(string $superglobal, $value, $default = null, $files_opt = "")
+    public static function request(string $superglobal, $value, $default = null, $sql_injection = true, $files_opt = "")
     {
         $superglobal = trim($superglobal);
 
@@ -115,7 +118,7 @@ class InputUtility
 
         $request = self::prepareMethod($superglobal);
 
-        return self::preventInjectionArray($request, $value, $default);
+        return self::preventInjectionArray($request, $value, $default, $sql_injection);
     }
 
     private static function fileRequest($value, $options, $default = null)

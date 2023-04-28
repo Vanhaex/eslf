@@ -8,7 +8,7 @@ use Framework\View;
 use Smarty;
 
 /**
- * Va générer et vérifier les jetons pour contrer la faille CSRF
+ * Generate and verify CSRF tokens against CSRF attacks
  */
 class VerifyCSRFMiddleware
 {
@@ -26,25 +26,31 @@ class VerifyCSRFMiddleware
      */
     public static function execute()
     {
-        // On vérifie si le jeton CSRF est correct dans le form
+        // Trying to verofy if CSRF token is correct in the form
         try{
             self::verifyToken(InputUtility::request_method());
         }
         catch (\Exception $e){}
 
-        // On génère un jeton CSRF
+        // Generating CSRF token
         $token = self::generateToken(self::$csrf_token_name);
 
-        // on l'assigne à un input dans le template
+        // Let's assign it to input in form
         self::$smarty = View::initView();
 
         self::$smarty->assign('csrf_token', $token);
     }
 
-
+    /**
+     * Generating CSRF token
+     *
+     * @param $input
+     * @return false|string
+     * @throws \Exception
+     */
     private static function generateToken($input)
     {
-        // Il faut indiquer le nom du champ input et session (identiques)
+        // We nee to precise input name and session (identical)
         if (empty($input)){
             return false;
         }
@@ -57,7 +63,7 @@ class VerifyCSRFMiddleware
     }
 
     /**
-     * Vérifie si le token existe et s'il est bien dans le form
+     * Verify if token exist and is in the form
      *
      * @param $method
      * @throws \Exception
@@ -69,38 +75,38 @@ class VerifyCSRFMiddleware
                 self::checkToken('csrf_token', InputUtility::request('post', 'csrf_token'), self::$csrf_token_lifetime);
             }
             else{
-                View::error500("Le jeton CSRF est inexistant");
+                View::error500("CSRF token don't exists");
             }
         }
     }
 
     /**
-     * Vérifie si le token donné dans un input correspond à celui en SESSION
+     * Verify if token given in input is the same than session token
      *
-     * @param string $session_token le nom de la variable de session
-     * @param string $token le valeur du input
-     * @param float|int $timeout la durée max du token (3h par défaut)
+     * @param string $session_token name of session variable
+     * @param string $token value of input
+     * @param float|int $timeout max duration of token (default 3 hours)
      * @throws \Exception
      */
     private static function checkToken(string $session_token, string $token, $timeout = null)
     {
         if (!$token){
-            View::error500("Le jeton CSRF est invalide");
+            View::error500("CSRF token is invalid");
         }
 
         $sessionToken = SessionUtility::getInstance()->getSession($session_token);
 
         if (!$sessionToken){
-            View::error500("Jeton de session CSRF invalide");
+            View::error500("CSRF session token is invalid");
         }
 
         if ($token !== $sessionToken){
-            View::error500("Le jeton CSRF est différent du jeton de session");
+            View::error500("CSRF token is different than session token");
         }
 
-        // On vérifie aussi si le jeton a expiré
+        // Let's verify if CSRF token has expired
         if (is_int($timeout) && (intval(substr(base64_decode($sessionToken), 0, 10)) + $timeout) < time()){
-            View::error500("Le jeton CSRF a expiré");
+            View::error500("CSRF token has expired");
         }
     }
 }

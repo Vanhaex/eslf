@@ -17,7 +17,7 @@ class AboutCommand extends Command
     {
         $this
             ->setName('about')
-            ->setDescription('Affiche les informations sur le Framework.')
+            ->setDescription('Show informations about framework.')
         ;
     }
 
@@ -26,7 +26,7 @@ class AboutCommand extends Command
         $output->writeln(
             <<<EOT
 <info>ESLF Framework - Easy Simple and Lightweight web Framework</info>
-<comment>ESLF est un framework simple et léger écrit en PHP permettant de créer des applications web</comment>
+<comment>ESLF is a simple framework for writing web applications </comment>
 EOT
         );
 

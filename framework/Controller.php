@@ -16,7 +16,7 @@ abstract class Controller
             $this->log = new LogWriting();
         }
 
-        // On initialise Smarty (cache, dossier des plugins, etc...)
+        // Smarty initialization
         $this->smarty = View::initView();
     }
 

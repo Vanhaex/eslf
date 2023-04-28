@@ -5,13 +5,13 @@ namespace Framework;
 use Config\AppConfig;
 
 /**
- * Classe permettant de gérer les API
+ * Class for managing APIs
  *
  */
 class ApiController
 {
-    private $path;
-    private $method;
+    private string $path;
+    private string $method;
 
     public function __construct($path, $method)
     {
@@ -23,21 +23,26 @@ class ApiController
     {
 
         if (!in_array($this->method, ["GET", "POST"])){
-            return $this->response("Méthode HTTP incorrecte.", 500);
+            return $this->response("Incorrect HTTP method.", 500);
         }
 
-        // On va parser l'url dans un premier temps pour aller piocher ensuite
+        // If we just specify /api, it's not good, we inform the user
+        if (preg_match("/^(\\" . AppConfig::getApiBaseUri() . ")(\/){0,1}$/im", $this->path)){
+            return $this->response("The API name is missing.", 500);
+        }
+
+        // We will parse the URL first and then draw
         preg_match("/^(\\" . AppConfig::getApiBaseUri() . "|\\/{1})(\\/[a-zA-Z0-9]+|\\/{1})/im", $this->path, $matches);
 
-        // Si on a pas l'uri de base qui permet d'appeler les API
-        if ($matches[1] !== AppConfig::getApiBaseUri()){
-            return $this->response("L'URI de base pour les API semble incorrecte.", 500);
+        // If we don't have the basic URI that allows us to call the APIs
+        if (count($matches) == 0 || $matches[1] !== AppConfig::getApiBaseUri()){
+            return $this->response("Base URI seems to be incorrect. You should use this : '" . AppConfig::getApiBaseUri() . "'." , 500);
         }
 
-        // On va donc créer le nom de l'api qu'on va chercher
+        // We are therefore going to create the name of the API that we are going to look for
         $api_name = ucfirst(str_replace("/", "", $matches[2])) . "Api";
 
-        // On vérifie s'il existe bien
+        // We check if there is
         $api_controller = "App\\api\\" . $api_name;
 
         if (class_exists($api_controller)) {
@@ -50,18 +55,26 @@ class ApiController
 
             }
             else {
-                return $this->response("La méthode de base (index) ne semble pas exister.", 500);
+                return $this->response("Base method (index) seems to be inexistant.", 500);
             }
         }
         else {
-            return $this->response("Aucune classe API avec le nom " . $api_name . " n'existe.", 500);
+            return $this->response("No API class named " . $api_name . " exists.", 500);
         }
 
         return $this->response($get);
     }
 
-    private function response($message, $code = 200, $content_type = 'application/json'){
-        header('Content-Type: '.$content_type);
+    /**
+     * Return the API response in JSON format
+     *
+     * @param $message <p>Display the result</p>
+     * @param int $code return http status code
+     * @param string $content_type The MIME type that will be used to display response
+     * @return false|string
+     */
+    private function response($message, int $code = 200, string $content_type = 'application/json'){
+        header('Content-Type: ' . $content_type);
         http_response_code($code);
 
         $arrayResponse = [
@@ -73,7 +86,7 @@ class ApiController
     }
 
     /**
-     * Permettra de capturer l'url avec les paramètres
+     * Will capture the url with parameters
      **/
     public function matchParameters($url)
     {

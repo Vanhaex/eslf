@@ -17,13 +17,13 @@ class VersionCommand extends Command
     {
         $this
             ->setName('version')
-            ->setDescription('Affiche la dernière version stable du projet.')
+            ->setDescription('Show last stable version of this project.')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("ESLF v2.1.1");
+        $output->writeln("ESLF v2.1.2");
 
         return Command::SUCCESS;
     }

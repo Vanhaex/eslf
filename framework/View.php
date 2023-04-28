@@ -69,3 +69,5 @@ class View
         exit(); // We stop script execution now
     }
 }
+
+?>

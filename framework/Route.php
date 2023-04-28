@@ -12,14 +12,14 @@ class Route {
 
     public function __construct($path, $controller, $method)
     {
-        $this->path = trim($path, '/');  // On retire les / inutils
+        $this->path = trim($path, '/');  // Lets remove useless '/'
         $this->controller = $controller;
         $this->method = $method;
     }
 
     /**
-     * Permettra de capturer l'url avec les paramètre
-     * get('/posts/:slug-:id') par exemple
+     * It will capture URL with parameters
+     * get('/posts/:parameters') for example
      **/
     public function match($url)
     {
@@ -64,8 +64,6 @@ class Route {
 
         return $rendered_page;
     }
-
 }
-
 
 ?>

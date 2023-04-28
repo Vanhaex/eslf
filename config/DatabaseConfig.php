@@ -5,37 +5,37 @@ namespace Config;
 class DatabaseConfig
 {
     /**
-     * Le host de connexion à la bdd
+     * Host for DDB connexion
      */
     const CONFIG_DATABASE_HOST = "localhost";
 
     /**
-     * Le port de connexion à la bdd
+     * Port for DDB connexion
      */
     const CONFIG_DATABASE_PORT = 3306;
 
     /**
-     * Le username de connexion à la bdd
+     * Username for DDB connexion
      */
     const CONFIG_DATABASE_USER = "";
 
     /**
-     * Le password de connexion à la bdd
+     * Password for DDB connexion
      */
     const CONFIG_DATABASE_PASSWORD = "";
 
     /**
-     * Le nom de la bdd
+     * Database name for DDB connexion
      */
     const CONFIG_DATABASE_DATABASE = "";
 
     /**
-     * Si true, le mode transactionnel est activé
+     * If true, transaction will be activated
      */
     const CONFIG_DATABASE_TRANSACTIONS = true;
 
     /**
-     * Retourne le host
+     * Return host
      *
      * @return string
      */
@@ -45,7 +45,7 @@ class DatabaseConfig
     }
 
     /**
-     * Retourne le port
+     * Return port
      *
      * @return int
      */
@@ -55,7 +55,7 @@ class DatabaseConfig
     }
 
     /**
-     * Retourne le user
+     * Return username
      *
      * @return string
      */
@@ -65,7 +65,7 @@ class DatabaseConfig
     }
 
     /**
-     * Retourne le password
+     * Return password
      *
      * @return string
      */
@@ -75,7 +75,7 @@ class DatabaseConfig
     }
 
     /**
-     * Retourne le nom de la bdd
+     * Return database name
      *
      * @return string
      */
@@ -85,7 +85,7 @@ class DatabaseConfig
     }
 
     /**
-     * Retourne la valeur du mode transaction
+     * Return transaction mode value
      *
      * @return bool
      */
@@ -93,5 +93,4 @@ class DatabaseConfig
     {
         return self::CONFIG_DATABASE_TRANSACTIONS;
     }
-
 }

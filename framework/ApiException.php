@@ -11,7 +11,7 @@ class ApiException extends \Exception
         if (AppConfig::getDebug()){
             parent::__construct($message, $code, $exception);
 
-            echo "Erreur API ".$code." : " . $message . " " . $exception;
+            echo "API error ".$code." : " . $message . " " . $exception;
         }
     }
 }

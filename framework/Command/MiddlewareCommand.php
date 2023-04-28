@@ -5,10 +5,7 @@ namespace Framework\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Framework\Command\StatusCommandHandler;
-
 
 class MiddlewareCommand extends Command
 {
@@ -21,17 +18,17 @@ class MiddlewareCommand extends Command
     {
         $this
             ->setName('middleware')
-            ->setDescription('Créé un middleware.')
-            ->setHelp('Evitez les noms constitués de caractères exotiques, utilisez plutot des noms ou termes explicites. Exemple : "Toto", "Home", etc...')
+            ->setDescription('Create a middleware.')
+            ->setHelp('Please avoid names with exotic characters, rather use explicit names or terms. Example : "Toto", "Home", etc...')
             ->addArgument(
                 'name',
                 InputArgument::OPTIONAL,
-                'Le nom du middleware, qui est obligatoire.'
+                'Middleware name, required.'
             )
             ->addArgument(
                 'folder',
                 InputArgument::OPTIONAL,
-                'Le sous-dossier dans lequel on souhaite créer le middleware. Optionnel'
+                'Sub-folder where we want to create the middleware. Optionnal'
             )
         ;
     }
@@ -41,16 +38,16 @@ class MiddlewareCommand extends Command
         $name = $input->getArgument('name');
         $folder = $input->getArgument('folder');
 
-        // Le nom du middleware doit exister sinon erreur
+        // Middleware name must exists
         if (!$name){
-            statusCommandHandler::error("Vous devez indiquer le nom du middleware si vous voulez le créer");
+            statusCommandHandler::error("You must tell controller name if you want to create it");
             return Command::FAILURE;
         }
         else {
             $this->createMiddleware($name, $folder);
         }
 
-        statusCommandHandler::success("Le middleware " . $name . "Middleware.php a bien été créé" . (isset($folder) ? " dans le sous-dossier " . $folder : "") . " ! N'oubliez pas de l'appeler dans le point d'entrée de votre projet (index.php).");
+        statusCommandHandler::success("Middleware " . $name . "Middleware.php has been successfully created " . (isset($folder) ? " in the sub-folder " . $folder : "") . " ! Don't forget to call it in the entry point of your project (index.php).");
         return Command::SUCCESS;
     }
 
@@ -60,13 +57,13 @@ class MiddlewareCommand extends Command
         $namespaceFolder = '';
         $path_to_middleware = $_SERVER['DOCUMENT_ROOT'] . "framework" . DIRECTORY_SEPARATOR . "Middlewares";
 
-        // Le namespace par défaut dans le dossier middleware, mais ça peut être ailleurs si on le précise avec "folder"
+        // Default namespace in middleware folder, we can precise it with "folder" option
         if (isset($folder)){
             $namespaceFolder = "\\" . trim($folder);
 
-            // On va créér le dossier s'il n'existe pas déjà
+            // Let's create folder if it don't exists
             if (!file_exists($path_to_middleware . DIRECTORY_SEPARATOR . $folder)){
-                print "\nCréation du dossier ".$folder."\n\n";
+                print "\nCreating folder ".$folder."\n\n";
                 mkdir($path_to_middleware . DIRECTORY_SEPARATOR . $folder, 0775, true);
             }
         }
@@ -74,10 +71,10 @@ class MiddlewareCommand extends Command
         $namespace = "Framework\Middlewares" . $namespaceFolder;
         $classname = trim($name."Middleware.php");
 
-        // On va chercher le script "template" middleware.script
+        // We will fetch script "middleware.script"
         $script = $this->getMiddlewareSourceScript();
 
-        // Et on va remplacer les variables {{ ... }} pour y mettre les noms et le namespace
+        // We will replace variables {{ .. }} by name and namespace
         $replaced = $this->replaceSourceVars($script, $namespace, $name);
 
         $finalPath = $path_to_middleware . DIRECTORY_SEPARATOR . (isset($folder) ? $folder . DIRECTORY_SEPARATOR : "") . $classname;
@@ -87,7 +84,7 @@ class MiddlewareCommand extends Command
 
     private function getMiddlewareSourceScript()
     {
-        print "On récupère le template source\n\n";
+        print "We will fetch source template\n\n";
         return $_SERVER["DOCUMENT_ROOT"] . self::SCRIPTS_PATH . "middleware.script";
     }
 
@@ -97,7 +94,7 @@ class MiddlewareCommand extends Command
             return false;
         }
 
-        print "On remplace les variables du template par les noms données en arguments\n\n";
+        print "We replace variables with name given in argument\n\n";
 
         $script = file_get_contents($script);
 

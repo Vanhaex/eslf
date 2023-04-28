@@ -3,18 +3,18 @@
 namespace Framework\Middlewares;
 
 /**
- * Va ajouter les en-têtes HTTP prédéfinies
+ * Adding HTTP header for the queries
  */
 class SetHeadersMiddleware
 {
     /**
-     * Lance ce qui va être executé par le Middleware
+     * Launch what will be executed by the Middleware
      *
      * @return void
      */
     public static function execute()
     {
-        // Contient les en-tetes HTTP et leur valeur par défaut
+        // Contains HTTP headers and their default value
         $headersArray = [
             "X-Frame-Options" => "SAMEORIGIN",
             "X-Content-Type-Options" => "nosniff",
@@ -27,7 +27,7 @@ class SetHeadersMiddleware
             header($key . ': ' . $value);
         }
 
-        // On retire l'en-tête 'X-Powered-By'.
+        // Let's remove 'X-Powered-By'.
         header_remove("X-Powered-By");
     }
 }

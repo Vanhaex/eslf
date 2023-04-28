@@ -4,6 +4,7 @@ namespace Framework\Model;
 
 use Config\DatabaseConfig;
 use ESDBaccess\ESDBaccess;
+use ESDBaccess\ESDBaccessException;
 
 abstract class Model
 {
@@ -15,6 +16,9 @@ abstract class Model
      */
     private ESDBaccess $esdbaccess;
 
+    /**
+     * @throws ESDBaccessException
+     */
     public function __construct()
     {
         // On initialise la connexion
@@ -26,7 +30,7 @@ abstract class Model
      * Récupère toutes les lignes de la table
      *
      * @return array|null
-     * @throws \ESDBaccess\ESDBaccessException
+     * @throws ESDBaccessException
      */
     public function getAll($orderBy = "", $order = "ASC")
     {
@@ -51,7 +55,7 @@ abstract class Model
      * @param $orderBy
      * @param $order
      * @return array|false|null
-     * @throws \ESDBaccess\ESDBaccessException
+     * @throws ESDBaccessException
      */
     public function getSome(int $limit, $orderBy = "", $order = "ASC")
     {
@@ -117,10 +121,10 @@ abstract class Model
     /**
      * Initialise la connexion à la base de données
      *
-     * @return ESDBaccess
-     * @throws \ESDBaccess\ESDBaccessException
+     * @return void
+     * @throws ESDBaccessException
      */
-    private function getMysqlConnection()
+    private function getMysqlConnection(): void
     {
         if (!isset($this->esdbaccess)){
             $this->esdbaccess = new ESDBaccess(DatabaseConfig::getDatabaseHost(), DatabaseConfig::getDatabaseUser(), DatabaseConfig::getDatabasePassword(), DatabaseConfig::getDatabaseDbName(), DatabaseConfig::getDatabasePort());
@@ -131,6 +135,5 @@ abstract class Model
             $this->esdbaccess->ESDBautocommit(DatabaseConfig::getDatabaseTransactionMode());
         }
 
-        return $this->esdbaccess;
     }
 }
