@@ -5,9 +5,9 @@ namespace Framework;
 abstract class ApiUtility
 {
     /**
-     * Permets de retourner mes paramètres données dans l'api
+     * Return parameter's values in URL
      *
-     * @param int $key le pointeur vers le paramètre à analyser (Exemple 0 => première occurrence)
+     * @param int $key index of parameter to analysing (Example 0 => first key)
      * @return false|mixed|string|string[]
      */
     protected function getParam(int $key = 0)

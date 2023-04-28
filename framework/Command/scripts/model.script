@@ -6,15 +6,17 @@ use Framework\Model\Model;
 
 class {{ ESbuilderName }} extends Model
 {
+    // Model generated with ESBuilder !
+
     /**
-     * La table en base de données qui sera utilisée par le Model
+     * Table from database that will be used by Model
      *
      * @var string
      */
     protected $table = "{{ ESbuilderModelTable }}";
 
     /**
-     * Les colonnes de la table qui seront utilisée par le Model
+     *  Columns from database that will be used by Model
      *
      * @var array
      */

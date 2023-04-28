@@ -5,43 +5,43 @@ namespace Config;
 class AppConfig
 {
     /**
-     * Le type d'environnement du projet (dev, recette, prod)
-     * Défaut : dev
+     * Project's environment (dev, prod, ...)
+     * Default : dev
      */
     const CONFIG_ENVIRONMENT= "dev";
 
     /**
-     * La valeur du mode debug, permet d'afficher les erreurs PHP dans les vues
-     * Défaut : true
+     * Debug mode, determine if we show PHP notice or errors messages in templates
+     * Default : true
      */
     const CONFIG_DEBUG = true;
 
     /**
-     * Indique si on doit générer des logs. Pour ne pas instancier l'objet LogWriting et éviter les erreurs
+     * For using logs
      */
     const ACTIVATE_LOGS = false;
 
     /**
-     * Le nom du dossier contenant les logs (ne doit pas finir par un "/")
+     * Folder's name for logs (must not finish by '/')
      */
     const LOG_FILE_PATH = "log";
 
     /**
-     * Indique si le projet nécessite la connexion à une base de données grâce à la lib ESDBaccess
-     * Pour ne pas instancier d'objet mysqli et éviter les erreurs. Utile pour les pages statiques
-     * Défaut : false
+     * Tell if we want to use ESDBaccess for retrieve and use database.
+     * If false, it will not be instanciated
+     * Default : false
      */
     const ACTIVATE_DATABASE = false;
 
     /**
-     * L'URI de base pour appeler une API. Peut être changé si besoin mais doit rester explicite et sans caractères exotiques
-     * Défaut : '/api'
+     * Base URI for API use. Must not contain exotic characters
+     * Default : '/api'
      */
     const API_BASE_URI = "/api";
 
 
     /**
-     * Retourne le type d'environnement du projet
+     * Return project environment value
      *
      * @return string
      */
@@ -51,7 +51,7 @@ class AppConfig
     }
 
     /**
-     * Retourne la valeur du mode debug
+     * Return debug mode value
      *
      * @return bool
      */
@@ -61,7 +61,7 @@ class AppConfig
     }
 
     /**
-     * Retourne le dossier contenant les logs
+     * Return logs folder value
      *
      * @return string
      */
@@ -71,7 +71,7 @@ class AppConfig
     }
 
     /**
-     * Retourne
+     * Return logs activation value
      *
      * @return bool
      */
@@ -81,7 +81,7 @@ class AppConfig
     }
 
     /**
-     * Retourne la valeur qui indique si le projet utilise une connexion à une base de données
+     * Return database use value
      *
      * @return bool
      */
@@ -91,7 +91,7 @@ class AppConfig
     }
 
     /**
-     * Retourne l'URI de base pour appeler une API
+     * Return base URI for API use value
      *
      * @return string
      */
@@ -99,5 +99,4 @@ class AppConfig
     {
         return self::API_BASE_URI;
     }
-
 }

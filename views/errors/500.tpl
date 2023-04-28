@@ -2,17 +2,17 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Erreur 500</title>
+    <title>500 Error</title>
     <link href="/public/assets/style.css" rel="stylesheet" type="text/css" >
   </head>
   <body style="text-align:center;" >
-    <h3>Erreur 500 - Erreur interne</h3>
-    <h5>Le serveur a rencontré une erreur et ne peut répondre à la requête</h5>
+    <h3>500 Error - Internal server error</h3>
+    <h5>The server encountered an error and cannot respond to the request</h5>
     {if isset($detail_exception)}
       <pre>
         {$detail_exception}
       </pre>
     {/if}
-    <a href="/">Revenir à l'accueil</a>
+    <a href="/">Go back to home</a>
   </body>
 </html>

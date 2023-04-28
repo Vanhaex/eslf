@@ -15,4 +15,13 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <UndefinedClass>
+            <errorLevel type="suppress">
+                <file name="./framework/Command/ApiCommand.php" />  <!-- all InvalidReturnType issues in this file are suppressed -->
+            </errorLevel>
+        </UndefinedClass>
+    </issueHandlers>
+
 </psalm>

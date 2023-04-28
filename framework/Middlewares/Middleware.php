@@ -3,7 +3,7 @@
 namespace Framework\Middlewares;
 
 /**
- * Classe qui appelle un middleware s'il existe
+ * Class that call Middleware
  *
  */
 class Middleware
@@ -11,7 +11,7 @@ class Middleware
     const MIDDLEWARE_NAMESPACE = "Framework\Middlewares\\";
 
     /**
-     * Appelle le middleware demandé
+     * Call desired middleware
      *
      * @param $middleware
      * @return bool
@@ -22,14 +22,14 @@ class Middleware
             return false;
         }
 
-        // Au cas où par erreur on rajoute "Middleware" dans le nom de la classe.
+        // If we add "Middleware" in case of error.
         $middleware = preg_split("/(middleware)$/i", $middleware)[0];
 
         return self::searchClass($middleware);
     }
 
     /**
-     * Cherche le middleware par son nom s'il existe
+     * Search middleware by his name if it exists
      *
      * @param $class
      * @return bool
@@ -45,7 +45,7 @@ class Middleware
 
             $MiddlewareClass = self::MIDDLEWARE_NAMESPACE . $class . "Middleware";
 
-            // La méthode statique "execute" propre à tous les middlewares créés
+            // Static methode for all middlewares that execute them
             call_user_func($MiddlewareClass . "::execute");
         }
 

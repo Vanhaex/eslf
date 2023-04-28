@@ -14,7 +14,7 @@ class AlertMessage
     }
 
     /**
-     * Créé un message d'alerte en tant de variable de session
+     * Create alert message as session variable
      *
      * @param $message
      * @param string $status
@@ -24,7 +24,7 @@ class AlertMessage
     {
         if ($this->session->hasSession("alert_messages"))
         {
-            // Pour l'instant c'est un array vide et on va ajouter le message et le statut ensuite
+            // For the moment, we create empty array and adding message and status later
             $this->session->setSession("alert_messages", []);
         }
 
@@ -37,7 +37,7 @@ class AlertMessage
     }
 
     /**
-     * Retourne les messages d'alertes
+     * Return alert messages
      *
      * @return array|false|mixed
      */
@@ -45,7 +45,7 @@ class AlertMessage
     {
         $messages_array = $this->session->getSession("alert_messages");
 
-        // Si il n'y a aucun message, on redéclare la liste des messages par un tableau vide
+        // If there's no messages, we declare messages list with empty array
         if(!$messages_array){
             $messages_array = [];
         }
@@ -56,7 +56,7 @@ class AlertMessage
     }
 
     /**
-     * Vérifie s'il existe des messages d'alerte
+     * Verify if there's alert messages
      *
      * @return bool
      */

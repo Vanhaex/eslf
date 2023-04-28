@@ -5,10 +5,7 @@ namespace Framework\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Framework\Command\StatusCommandHandler;
-
 
 class ControllerCommand extends Command
 {
@@ -21,17 +18,17 @@ class ControllerCommand extends Command
     {
         $this
             ->setName('controller')
-            ->setDescription('Créé un controller.')
-            ->setHelp('Evitez les noms constitués de caractères exotiques, utilisez plutot des noms ou termes explicites. Exemple : "Toto", "Home", etc...')
+            ->setDescription('Create a controller.')
+            ->setHelp('Please avoid names with exotic characters, rather use explicit names or terms. Example : "Toto", "Home", etc...')
             ->addArgument(
                 'name',
                 InputArgument::OPTIONAL,
-                'Le nom du controller, qui est obligatoire.'
+                'Controller name, required.'
             )
             ->addArgument(
                 'folder',
                 InputArgument::OPTIONAL,
-                'Le sous-dossier dans lequel on souhaite créer le controller. Optionnel'
+                'Sub-folder where we want to create the controller. Optionnal'
             )
             ;
     }
@@ -41,16 +38,16 @@ class ControllerCommand extends Command
         $name = $input->getArgument('name');
         $folder = $input->getArgument('folder');
 
-        // Le nom du controller doit exister sinon erreur
+        // Controller name must exists
         if (!$name){
-            statusCommandHandler::error("Vous devez indiquer le nom du controller si vous voulez le créer");
+            statusCommandHandler::error("You must tell controller name if you want to create it");
             return Command::FAILURE;
         }
         else {
             $this->createController($name, $folder);
         }
 
-        statusCommandHandler::success("Le controller " . $name . "Controller.php a bien été créé" . (isset($folder) ? " dans le sous-dossier " . $folder : "") . " !");
+        statusCommandHandler::success("Controller " . $name . "Controller.php has been successfully created " . (isset($folder) ? " in the sub-folder " . $folder : "") . " !");
         return Command::SUCCESS;
     }
 
@@ -60,13 +57,13 @@ class ControllerCommand extends Command
         $namespaceFolder = '';
         $path_to_controller = $_SERVER['DOCUMENT_ROOT'] . "app" . DIRECTORY_SEPARATOR . "controller";
 
-        // Le namespace par défaut dans le dossier controller, mais ça peut être ailleurs si on le précise avec "folder"
+        // Default namespace in controller folder, we can precise it with "folder" option
         if (isset($folder)){
             $namespaceFolder = "\\" . trim($folder);
 
-            // On va créér le dossier s'il n'existe pas déjà
+            // Let's create folder if it don't exists
             if (!file_exists($path_to_controller . DIRECTORY_SEPARATOR . $folder)){
-                print "\nCréation du dossier ".$folder."\n\n";
+                print "\nCreating folder ".$folder."\n\n";
                 mkdir($path_to_controller . DIRECTORY_SEPARATOR . $folder, 0775, true);
             }
         }
@@ -74,10 +71,10 @@ class ControllerCommand extends Command
         $namespace = "App\controller" . $namespaceFolder;
         $classname = trim($name."Controller.php");
 
-        // On va chercher le script "template" controller.script
+        // We will fetch script "controller.script"
         $script = $this->getControllerSourceScript();
 
-        // Et on va remplacer les variables {{ ... }} pour y mettre les noms et le namespace
+        // We will replace variables {{ .. }} by name and namespace
         $replaced = $this->replaceSourceVars($script, $namespace, $name);
 
         $finalPath = $path_to_controller . DIRECTORY_SEPARATOR . (isset($folder) ? $folder . DIRECTORY_SEPARATOR : "") . $classname;
@@ -87,7 +84,7 @@ class ControllerCommand extends Command
 
     private function getControllerSourceScript()
     {
-        print "On récupère le template source\n\n";
+        print "We will fetch source template\n\n";
         return $_SERVER["DOCUMENT_ROOT"] . self::SCRIPTS_PATH . "controller.script";
     }
 
@@ -97,7 +94,7 @@ class ControllerCommand extends Command
             return false;
         }
 
-        print "On remplace les variables du template par les noms données en arguments\n";
+        print "We replace variables with name given in argument\n";
 
         $script = file_get_contents($script);
 

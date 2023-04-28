@@ -17,7 +17,7 @@ class VersionCommand extends Command
     {
         $this
             ->setName('version')
-            ->setDescription('Affiche la dernière version stable du projet.')
+            ->setDescription('Show last stable version of this project.')
         ;
     }
 

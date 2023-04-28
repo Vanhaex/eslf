@@ -27,7 +27,7 @@ foreach ($commandArrays as $cmd){
 
 $application->add($default = new VersionCommand());
 
-// La commande about par défaut qui présente le framework
+// Default command is 'about'
 $application->setDefaultCommand($default->getName());
 $application->run();
 

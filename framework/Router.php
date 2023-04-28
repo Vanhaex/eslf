@@ -4,7 +4,7 @@ namespace Framework;
 
 class Router
 {
-    private $path; // Contiendra l'URL sur laquelle on souhaite se rendre
+    private $path; // Contains target URL
     private $routes = ['GET' => [], 'POST' => []];
 
     public function __construct(){}
@@ -13,21 +13,21 @@ class Router
     {
         $route = new Route($path, $controller, $method);
         $this->routes["GET"][] = $route;
-        return $route; // On retourne la route pour "enchainer" les méthodes
+        return $route; // We return the route to "chain" methods
     }
 
     public function post($path, $controller, $method)
     {
         $route = new Route($path, $controller, $method);
         $this->routes["POST"][] = $route;
-        return $route; // On retourne la route pour "enchainer" les méthodes
+        return $route; // We return the route to "chain" methods
     }
 
     public function api($path, $method)
     {
         $route = new ApiController($path, $method);
         $this->routes[$method][] = $route;
-        return $route; // On retourne la sortie de l'API
+        return $route; // We return API output
     }
 
     private function execute_route($request_method, $url)
@@ -52,7 +52,7 @@ class Router
         $req_method = InputUtility::request_method();
         $clean_path = InputUtility::clean_uri();
 
-        // On a vérifié la méthode utilisée et l'URI est propre
+        // We verified used method and URi is clean
         return $this->execute_route($req_method, $clean_path);
     }
 

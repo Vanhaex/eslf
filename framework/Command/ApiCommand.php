@@ -3,7 +3,6 @@
 namespace Framework\Command;
 
 use Config\AppConfig;
-use Framework\Command\StatusCommandHandler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,11 +22,11 @@ class ApiCommand extends Command
         $this
             ->setName('api')
             ->setDescription('Créé une API.')
-            ->setHelp('Evitez les noms constitués de caractères exotiques, utilisez plutot des noms ou termes explicites. Exemple : "Toto", "Home", etc...')
+            ->setHelp('Please avoid names with exotic characters, rather use explicit names or terms. Example : "Toto", "Home", etc...')
             ->addArgument(
                 'name',
                 InputArgument::OPTIONAL,
-                'Le nom de l\'API, qui est obligatoire. Veuillez utiliser un nom explicite qui sera donné dans l\'url (exemple : \'bonjour\' pour \'/api/bonjour\')'
+                'Name of the API, required. Please use an explicit name that will be shown in the URL (example : \'hello\' for \'/api/hello\')'
             )
         ;
     }
@@ -37,28 +36,28 @@ class ApiCommand extends Command
         $name = $input->getArgument('name');
         $uri = AppConfig::getApiBaseUri() . "/" . trim(strtolower($name));
 
-        // Aucun cas où on ne souhaite pas décrire l'API
-        $description = "L'API " . ucfirst($name) . "Api générée par ESbuilder";
+        // Default description
+        $description = "API " . ucfirst($name) . "Api generated with ESbuilder";
 
-        // On demande si l'API doit être décrite
+        // Let's ask to the user if he want to describe
         $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion("\nSouhaitez-vous une description pour l'API " . ucfirst($name) . "Api ? (Y/n)", false, '/^(y|j)/i');
+        $question = new ConfirmationQuestion("\nDo you want to describe this API " . ucfirst($name) . "Api ? (Y/n)", false, '/^(y|j)/i');
 
         if ($helper->ask($input, $output, $question)){
-            $question = new Question("\nVeuillez donner la description de votre API : ", $description);
+            $question = new Question("\nPlease describe your API in such words : ", $description);
             $description = $helper->ask($input, $output, $question);
         }
 
-        // Le nom de l'API doit exister sinon erreur
+        // API name must exists
         if (!$name){
-            statusCommandHandler::error("\nVous devez indiquer le nom de l'API si vous voulez la créer");
+            statusCommandHandler::error("\nYou must give a name for your API if you want to use it !");
             return Command::FAILURE;
         }
         else {
             $this->createAPI($name, $description, $uri);
         }
 
-        statusCommandHandler::success("L'API " . $name . "Api.php a bien été créée dans le dossier '/app/api' !");
+        statusCommandHandler::success("API " . $name . "Api.php was successfully created in '/app/api' folder !");
         return Command::SUCCESS;
     }
 
@@ -74,10 +73,10 @@ class ApiCommand extends Command
 
         $classname = trim($name."Api.php");
 
-        // On va chercher le script "template" api.script
+        // Let's search script "api.script"
         $script = $this->getAPISourceScript();
 
-        // Et on va remplacer les variables {{ ... }} pour y mettre les noms et le namespace
+        // We will replace variables {{ .. }} by name and namespace
         $replaced = $this->replaceSourceVars($script, $namespace, $name, $description, $uri);
 
         $finalPath = $path_to_api . DIRECTORY_SEPARATOR . (isset($folder) ? $folder . DIRECTORY_SEPARATOR : "") . $classname;
@@ -87,7 +86,7 @@ class ApiCommand extends Command
 
     private function getAPISourceScript()
     {
-        print "\nOn récupère le template source\n\n";
+        print "\nWe will fetch source template\n\n";
         return $_SERVER["DOCUMENT_ROOT"] . self::SCRIPTS_PATH . "api.script";
     }
 
@@ -97,7 +96,7 @@ class ApiCommand extends Command
             return false;
         }
 
-        print "On remplace les variables du template par les noms données en arguments\n";
+        print "We replace variables with name given in argument\n";
 
         $script = file_get_contents($script);
 

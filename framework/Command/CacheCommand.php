@@ -19,11 +19,11 @@ class CacheCommand extends Command
     {
         $this
             ->setName('cache')
-            ->setDescription('Vide le cache.')
+            ->setDescription('Empty cache.')
             ->addArgument(
                 'all',
                 InputArgument::OPTIONAL,
-                'Vide tous les dossiers de cache du projet y compris celui pour les vues (dossier views_c).'
+                'Empty all cache folders, (also folder views_c).'
             )
         ;
     }
@@ -35,7 +35,7 @@ class CacheCommand extends Command
         $cacheFolder = $_SERVER["DOCUMENT_ROOT"] . "cache/" ;
         $viewsCacheFolder = $_SERVER["DOCUMENT_ROOT"] . "views_c/";
 
-        // On vide déjà le dossier cache de base
+        // Empty base cache folder
         if (is_dir($cacheFolder) && is_readable($cacheFolder)){
             $files = glob($cacheFolder."*");
             foreach ($files as $file) {
@@ -45,7 +45,7 @@ class CacheCommand extends Command
             }
         }
 
-        // Le nom du controller doit exister sinon erreur
+        // Name of the controller musts exists
         if ($all){
             if (is_dir($viewsCacheFolder) && is_readable($viewsCacheFolder)){
                 $views = glob($viewsCacheFolder."*");
@@ -54,15 +54,15 @@ class CacheCommand extends Command
                         unlink($view);
                     }
                 }
-                print "\nOption all : Vidage du cache pour les vues\n";
+                print "\nOption all : Empty cache for views\n";
             }
             else {
-                statusCommandHandler::error("Le dossier 'views_c' n'est pas pas un dossier ou est inaccessible en lecture");
+                statusCommandHandler::error("Folder 'views_c' is not a folder or you can't read it");
                 return Command::FAILURE;
             }
         }
 
-        statusCommandHandler::success("Les dossiers de cache ont bien été vidés", $output);
+        statusCommandHandler::success("Cache folder has been successfully empty ", $output);
         return Command::SUCCESS;
     }
 }

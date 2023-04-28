@@ -5,12 +5,12 @@ namespace {{ ESbuilderNamespace }};
 class {{ ESbuilderName }}Middleware
 {
     /**
-     * Lance ce qui va être executé par le Middleware
+     * Launch what will be executed by the Middleware
      *
      * @return void
      */
     public static function execute()
     {
-        // Middleware généré grâce à ESBuilder !
+        // Middleware generated with ESBuilder !
     }
 }
