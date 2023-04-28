@@ -1,6 +1,9 @@
 # ESLF Web Framework Change Log
 
-## Version 2.1.1 (29/03/2032)
+## Version 2.1.2 (28/04/2023)
+* Complete translation from French to English
+
+## Version 2.1.1 (29/03/2023)
 * Translate README
 * Adding MIT license
 
