@@ -1,5 +1,8 @@
 # ESLF Web Framework Change Log
 
+## Version 2.1.3 (07/07/2023)
+* Adding "node_modules" folder for node dependancies and package-lock.json in gitignore file.
+
 ## Version 2.1.2 (28/04/2023)
 * Complete translation from French to English
 
