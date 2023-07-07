@@ -11,6 +11,8 @@ It is a framework for creating web applications in PHP that is easy to use and l
 Its architecture is based on the principle of MVC for Model, View, Controller. It therefore separates the processing from the display by using the **Smarty** templating engine.
 Some classes have been created to secure the processing of user data by POST or GET methods, for example. They also make it easier to control the data entered by users.
 
+**This framework is brought to you with [TailwindCSS](https://tailwindcss.com)**
+
 ## Why a handmade framework? Why not use a better known framework?
 
 My goal from the start was to create a framework by myself, inspired by my experience in the field of web development. Above all, I wanted something light with the bare minimum. It makes it much easier for me to build web apps and add functionality where needed.
