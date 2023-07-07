@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>404 Error</title>
-    <link href="/public/assets/style.css" rel="stylesheet" type="text/css" >
+    <link href="/public/assets/css/style.css" rel="stylesheet" type="text/css" >
   </head>
   <body style="text-align:center;" >
     <h3>404 Error - URL not found</h3>

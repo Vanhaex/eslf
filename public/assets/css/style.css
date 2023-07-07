@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: Inter,sans-serif;
+    text-align: center;
+}
+
+#github_logo {
+    height: 4rem;
+    width: 4rem;
+}

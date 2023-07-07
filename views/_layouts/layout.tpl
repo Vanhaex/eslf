@@ -2,10 +2,12 @@
 <html dir="ltr" lang="en">
     <head>
         <meta charset="utf-8" />
-        <link rel="icon" type="image/ico" href="/public/favicon.ico">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <title>ESLF {if isset($page_titre) && !empty($page_titre)}- {$page_titre}{/if}</title>
 
-        <link href="/public/assets/style.css" rel="stylesheet" type="text/css" >
+        <!-- Theme style -->
+        <link href="/public/assets/css/custom.min.css" rel="stylesheet" type="text/css" >
 
         {block name=css}{/block}
 
